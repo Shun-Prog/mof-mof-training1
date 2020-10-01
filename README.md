@@ -1,24 +1,16 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## training(前半)
 
-Things you may want to cover:
+### 万葉さんの研修カリキュラムを利用
+https://github.com/everyleaf/el-training
+
 
 * Ruby version
+2.7.0
 
-* System dependencies
+* Rails version
+6.0.3.3
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* PostgreSQL version
+12.3
