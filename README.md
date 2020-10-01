@@ -28,7 +28,7 @@ name: string
 email: string  
 password: string  
 confirmation_password: string  
-<br>
+  
 * **tasks**  
 id: integer  
 name: string  
@@ -37,12 +37,13 @@ user_id: integer
 status: integer  
 expired_at: datetime  
 priority: integer  
-<br>
+  
 * **labels**  
 id: integer   
 name: string  
-<br>
+  
 * **task_labels**  
 id: integer  
 task_id: integer  
 label_id: integer  
+  
