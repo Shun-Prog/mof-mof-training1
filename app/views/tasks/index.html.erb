@@ -1,4 +1,5 @@
 <h1>Tasks#index</h1>
+<%= link_to '新規作成', new_task_path %>
 <% @tasks.each do |task| %>
 <div>
     <%= task.name %>
@@ -6,4 +7,5 @@
 <div>
     <%= task.description %>
 </div>
+<%= link_to '詳細を見る', task_path(task) %>
 <% end %>

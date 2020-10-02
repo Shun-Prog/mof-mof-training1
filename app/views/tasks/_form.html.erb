@@ -1,0 +1,25 @@
+<% if task.errors.any? %>
+    <div>
+        <ul>
+            <% @task.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+        </ul>
+    </div>
+<% end %>
+
+<%= form_with  model: task, local: true do |form| %>
+
+    <div class="field">    
+        <%= form.label :name, "タスク名" %>
+        <%= form.text_field :name %>
+    <div>   
+
+    <div class="field">    
+        <%= form.label :description, "タスク詳細" %>
+        <%= form.text_area :description %>
+    <div>  
+
+    <%= form.submit "保存"%>
+
+<% end %>
