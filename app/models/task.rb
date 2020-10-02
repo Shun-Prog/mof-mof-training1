@@ -12,4 +12,8 @@
 #  updated_at  :datetime         not null
 #
 class Task < ApplicationRecord
+    validates :name, presence: true, length: { maximum: 30 }
+    validates :text, presence: true, length: { maximum: 1000 }
+    validates :priority, presence: true
+    validates :status, presence: true
 end
