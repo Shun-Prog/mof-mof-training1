@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id          :bigint           not null, primary key
+#  description :text
+#  expired_at  :datetime
+#  name        :string
+#  priority    :integer
+#  status      :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
+one:
+  name: MyString
+  description: MyText
+  status: 1
+  expired_at: 2020-10-02 10:37:35
+  priority: 1
+
+two:
+  name: MyString
+  description: MyText
+  status: 1
+  expired_at: 2020-10-02 10:37:35
+  priority: 1
