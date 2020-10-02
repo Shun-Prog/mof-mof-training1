@@ -14,6 +14,7 @@
 class Task < ApplicationRecord
     validates :name, presence: true, length: { maximum: 30 }
     validates :description, presence: true, length: { maximum: 1000 }
-    validates :priority, presence: true
-    validates :status, presence: true
+    # 一時的にコメントアウト
+    # validates :priority
+    # validates :status, presence: true
 end
