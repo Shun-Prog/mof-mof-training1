@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id          :bigint           not null, primary key
+#  description :text
+#  expired_at  :datetime
+#  name        :string
+#  priority    :integer
+#  status      :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
+one:
+  name: 'オフィスの利用方法'
+  description: '鍵の締め方、ゴミの出し方を覚える'
+  status: 1
+  expired_at: 2020-10-02 12:00:00
+  priority: 1
+
+two:
+  name: 'Rails研修'
+  description: 'Rails研修を10月中に完了させる'
+  status: 2
+  expired_at: 2020-10-31 23:59:59
+  priority: 2
