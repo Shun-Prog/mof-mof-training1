@@ -1,4 +1,8 @@
-version: 2 # CircleCI 2.0 を使用します
+version: 2.1
+
+orbs:
+  slack: circleci/slack@3.4.2
+      
 jobs: # 一連のステップ
   build: # ワークフローを使用しない実行では、エントリポイントとして `build` ジョブが必要です
     parallelism: 3 # このジョブのインスタンスを 3 つ並列実行します
@@ -73,3 +77,8 @@ jobs: # 一連のステップ
 
       - store_test_results:
           path: test_results
+      
+
+      - slack/status:
+          fail_only: false
+          webhook: '${SLACK_WEBHOOK}'
