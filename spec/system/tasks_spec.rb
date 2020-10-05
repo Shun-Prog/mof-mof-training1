@@ -49,7 +49,7 @@ RSpec.describe 'Tasks', type: :system do
       let(:description) { 'タスク詳細' }
 
       it 'エラーになる' do
-        expect(page).to have_content 'Name can\'t be blank'
+        expect(page).to have_content 'タスク名を入力してください'
       end
     end
     

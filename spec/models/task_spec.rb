@@ -12,9 +12,9 @@ RSpec.describe Task, type: :model do
         expect(task).to be_invalid
       end
 
-      it '入力してくださいとエラーメッセージが出る' do
+      it '入力不足のエラーメッセージが出る' do
         task.valid?
-        expect(task.errors[:name]).to include('can\'t be blank')
+        expect(task.errors[:name]).to include('を入力してください')
       end
 
     end
@@ -27,9 +27,9 @@ RSpec.describe Task, type: :model do
         expect(task).to be_invalid
       end
   
-      it '長すぎますとエラーメッセージが出る' do
+      it '文字数超過のエラーメッセージが出る' do
         task.valid?
-        expect(task.errors[:name]).to include('is too long (maximum is 30 characters)')
+        expect(task.errors[:name]).to include('は30文字以内で入力してください')
       end
   
     end
@@ -55,9 +55,9 @@ RSpec.describe Task, type: :model do
         expect(task).to be_invalid
       end
   
-      it '入力してくださいとエラーメッセージが出る' do
+      it '入力不足のエラーメッセージが出る' do
         task.valid?
-        expect(task.errors[:description]).to include('can\'t be blank')
+        expect(task.errors[:description]).to include('を入力してください')
       end
 
     end
@@ -70,9 +70,9 @@ RSpec.describe Task, type: :model do
         expect(task).to be_invalid
       end
   
-      it '長すぎますとエラーメッセージが出る' do
+      it '文字数超過のエラーメッセージが出る' do
         task.valid?
-        expect(task.errors[:description]).to include('is too long (maximum is 1000 characters)')
+        expect(task.errors[:description]).to include('は1000文字以内で入力してください')
       end
     end
 
