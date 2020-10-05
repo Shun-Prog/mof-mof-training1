@@ -6,7 +6,7 @@ RSpec.describe 'Tasks', type: :system do
 
     let!(:task){ FactoryBot.create(:task) }
 
-    it "一覧で表示される" do
+    it '一覧で表示される' do
       visit tasks_path
       expect(page).to have_content task.name
     end
@@ -17,7 +17,7 @@ RSpec.describe 'Tasks', type: :system do
 
     let!(:task){ FactoryBot.create(:task) }
 
-    it "詳細が表示される" do
+    it '詳細が表示される' do
       visit tasks_path(task)
       expect(page).to have_content task.name
       expect(page).to have_content task.description
@@ -29,27 +29,27 @@ RSpec.describe 'Tasks', type: :system do
 
     before do
       visit new_task_path
-      fill_in "タスク名",	with: name
-      fill_in "タスク詳細",	with: description
-      click_button "保存"
+      fill_in 'タスク名',	with: name
+      fill_in 'タスク詳細',	with: description
+      click_button '保存'
     end
 
-    context "タスク名を入力した時" do
+    context 'タスク名を入力した時' do
       let(:name) { 'タスク名' }
       let(:description) { 'タスク詳細' }
 
-      it "作成できる" do
+      it '作成できる' do
         expect(page).to have_content name
         expect(page).to have_content description
       end
     end
 
-    context "タスク名を入力しない時" do
+    context 'タスク名を入力しない時' do
       let(:name) { '' }
       let(:description) { 'タスク詳細' }
 
-      it "エラーになる" do
-        expect(page).to have_content "Name can't be blank"
+      it 'エラーになる' do
+        expect(page).to have_content 'Name can\'t be blank'
       end
     end
     
@@ -62,16 +62,16 @@ RSpec.describe 'Tasks', type: :system do
 
     before do
       visit edit_task_path(task)
-      fill_in "タスク名",	with: name
-      fill_in "タスク詳細",	with: description
-      click_button "保存"
+      fill_in 'タスク名',	with: name
+      fill_in 'タスク詳細',	with: description
+      click_button '保存'
     end
 
-    context "タスク名編集した時" do
+    context 'タスク名編集した時' do
       let(:name) { 'タスク名(変更後)' }
       let(:description) { 'タスク詳細(変更後)' }
 
-      it "編集できる" do
+      it '編集できる' do
         expect(page).to have_content name
         expect(page).to have_content description
       end
