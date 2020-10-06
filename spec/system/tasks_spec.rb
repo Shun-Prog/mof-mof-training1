@@ -5,10 +5,28 @@ RSpec.describe 'Tasks', type: :system do
   describe '一覧' do
 
     let!(:task){ FactoryBot.create(:task) }
+    let!(:task_add_1year){ FactoryBot.create(:task, created_at: Time.now + 1.years) }
+    let!(:task_add_1day){ FactoryBot.create(:task, created_at: Time.now + 1.days) }
+    let!(:task_add_1hour){ FactoryBot.create(:task, created_at: Time.now + 1.hours) }
 
-    it '一覧で表示される' do
+    before do
       visit tasks_path
+    end
+    
+    it '一覧で表示される' do
       expect(page).to have_content task.name
+      expect(page).to have_content task.created_at
+    end
+
+    it '作成日の降順で並ぶ' do
+
+      task_list = page.all('.task')
+      id_of_task_created = 'task_created_at'
+
+      expect(task_list[0].find_by_id(id_of_task_created).text).to eq task_add_1year.created_at.to_s # 現在日時 + 1年
+      expect(task_list[1].find_by_id(id_of_task_created).text).to eq task_add_1day.created_at.to_s # 現在日時 + 1日
+      expect(task_list[2].find_by_id(id_of_task_created).text).to eq task_add_1hour.created_at.to_s # 現在日時 + 1時間
+      expect(task_list[3].find_by_id(id_of_task_created).text).to eq task.created_at.to_s # 現在日時
     end
     
   end
