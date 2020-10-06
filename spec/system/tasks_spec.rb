@@ -4,11 +4,26 @@ RSpec.describe 'Tasks', type: :system do
 
   describe '一覧' do
 
-    let!(:task){ FactoryBot.create(:task) }
+    # 順番のテストのため、順序をバラバラに作成 letの名前を日付の降順で命名
+    let!(:task_order1){ FactoryBot.create(:task, created_at: Time.now + 1.days) }
+    let!(:task_order0){ FactoryBot.create(:task, created_at: Time.now + 1.years) }
+    let!(:task_order2){ FactoryBot.create(:task, created_at: Time.now + 1.hours) }
+    let!(:task_order3){ FactoryBot.create(:task) }
 
-    it '一覧で表示される' do
+    before do
       visit tasks_path
-      expect(page).to have_content task.name
+    end
+    
+    it '一覧で表示される' do
+      expect(page).to have_content task_order0.name
+      expect(page).to have_content task_order0.created_at
+    end
+
+    it '作成日の降順で並ぶ' do
+      page.all(".task").each_with_index do | task, idx | 
+        display_text = task.find_by_id('task_created_at').text
+        expect(display_text).to eq eval("task_order#{idx}").created_at.to_s
+      end
     end
     
   end
