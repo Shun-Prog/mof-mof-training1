@@ -1,0 +1,84 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@3.4.2
+      
+jobs: # 一連のステップ
+  build: # ワークフローを使用しない実行では、エントリポイントとして `build` ジョブが必要です
+    parallelism: 3 # このジョブのインスタンスを 3 つ並列実行します
+    docker: # Docker でステップを実行します
+      - image: circleci/ruby:2.7.0-node-browsers # このイメージをすべての `steps` が実行されるプライマリ コンテナとして使用します
+        environment: # プライマリ コンテナの環境変数
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLER_VERSION: 2.1.4
+          PGHOST: 127.0.0.1
+          PGUSER: circleci-demo-ruby
+          RAILS_ENV: test
+      - image: circleci/postgres:12.4 # データベース イメージ
+        environment: # データベースの環境変数
+          POSTGRES_USER: postgres
+          POSTGRES_DB: tr_task_test
+          POSTGRES_PASSWORD: postgres
+    steps: # 実行可能コマンドの集合
+      - checkout 
+
+      # Bundler のバージョンを指定します
+      - run:
+          name: Bundler の指定
+          command: bundle -v
+
+      - restore_cache:
+          keys:
+            - rails-demo-bundle-v3-{{ checksum "Gemfile.lock" }}
+            - rails-demo-bundle-v3-
+
+      - run: # Ruby の依存関係をインストールします
+          name: バンドル インストール
+          command: |
+            gem install bundler -v 2.1.4
+            bundle check --path vendor/bundle || bundle install
+
+      - save_cache:
+          key: rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - restore_cache:
+          keys:
+            - rails-demo-yarn-{{ checksum "yarn.lock" }}
+            - rails-demo-yarn-
+
+      - run:
+          name: Yarn のインストール
+          command: yarn install --cache-folder ~/.cache/yarn
+
+      - save_cache:
+          key: rails-demo-yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      - run:
+          name: DB の待機
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run:
+          name: データベースのセットアップ
+          command: bin/rails db:schema:load --trace
+
+      - run:
+          name: RSpec の並列実行
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+      - store_test_results:
+          path: test_results
+      
+
+      - slack/status:
+          fail_only: false
+          webhook: '${SLACK_WEBHOOK}'
