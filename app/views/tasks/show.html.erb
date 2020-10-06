@@ -5,6 +5,9 @@
 <div>
     <%= @task.description %>
 </div>
+<div>
+    <%= @task.created_at %>
+</div>
 
 <%= link_to '編集', edit_task_path(@task) %>
 <%= link_to "削除", @task, method: :delete, data: { confirm: "タスクを削除してもよろしいですか？" } %>

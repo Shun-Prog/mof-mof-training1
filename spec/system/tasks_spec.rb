@@ -18,9 +18,10 @@ RSpec.describe 'Tasks', type: :system do
     let!(:task){ FactoryBot.create(:task) }
 
     it '詳細が表示される' do
-      visit tasks_path(task)
+      visit task_path(task)
       expect(page).to have_content task.name
       expect(page).to have_content task.description
+      expect(page).to have_content task.created_at
     end
 
   end
@@ -41,6 +42,8 @@ RSpec.describe 'Tasks', type: :system do
       it '作成できる' do
         expect(page).to have_content name
         expect(page).to have_content description
+        expect(page).to have_content /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
+        
       end
     end
 
@@ -74,6 +77,7 @@ RSpec.describe 'Tasks', type: :system do
       it '編集できる' do
         expect(page).to have_content name
         expect(page).to have_content description
+        expect(page).to have_content /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
       end
     end
     
