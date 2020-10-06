@@ -11,13 +11,18 @@
 <%= form_with  model: task, local: true do |form| %>
 
     <div class="field">    
-        <%= form.label :name, "タスク名" %>
+        <%= form.label :name %>
         <%= form.text_field :name %>
     <div>   
 
     <div class="field">    
-        <%= form.label :description, "タスク詳細" %>
+        <%= form.label :description %>
         <%= form.text_area :description %>
+    <div>  
+
+    <div class="field">    
+        <%= form.label :expired_at %>
+        <%= form.datetime_field :expired_at %>
     <div>  
 
     <%= form.submit "保存"%>
