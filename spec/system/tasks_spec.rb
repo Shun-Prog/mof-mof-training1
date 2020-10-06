@@ -4,10 +4,13 @@ RSpec.describe 'Tasks', type: :system do
 
   describe '一覧' do
 
-    let!(:task){ FactoryBot.create(:task) }
-    let!(:task_add_1year){ FactoryBot.create(:task, created_at: Time.now + 1.years) }
-    let!(:task_add_1day){ FactoryBot.create(:task, created_at: Time.now + 1.days) }
-    let!(:task_add_1hour){ FactoryBot.create(:task, created_at: Time.now + 1.hours) }
+    let!(:task){ FactoryBot.create(:task, expired_at: Time.now.next_year) }
+    let!(:task_add_1year){ FactoryBot.create(:task, expired_at: Time.now.next_year + 1.years, created_at: Time.now + 1.years) }
+    let!(:task_add_1day){ FactoryBot.create(:task, expired_at: Time.now.next_year + 1.days, created_at: Time.now + 1.days) }
+    let!(:task_add_1hour){ FactoryBot.create(:task, expired_at: Time.now.next_year + 1.hours, created_at: Time.now + 1.hours) }
+
+    # タスク一覧のtable rowを取得
+    let(:rows) { page.all('.task_row') }
 
     before do
       visit tasks_path
@@ -19,16 +22,30 @@ RSpec.describe 'Tasks', type: :system do
     end
 
     it '作成日の降順で並ぶ' do
-
-      task_list = page.all('.task')
-      id_of_task_created = 'task_created_at'
-
-      expect(task_list[0].find_by_id(id_of_task_created).text).to eq task_add_1year.created_at.to_s # 現在日時 + 1年
-      expect(task_list[1].find_by_id(id_of_task_created).text).to eq task_add_1day.created_at.to_s # 現在日時 + 1日
-      expect(task_list[2].find_by_id(id_of_task_created).text).to eq task_add_1hour.created_at.to_s # 現在日時 + 1時間
-      expect(task_list[3].find_by_id(id_of_task_created).text).to eq task.created_at.to_s # 現在日時
+      expect(rows[0].find('.task_created_at').text).to eq task_add_1year.created_at.to_s 
+      expect(rows[1].find('.task_created_at').text).to eq task_add_1day.created_at.to_s # 現在日時 + 1日
+      expect(rows[2].find('.task_created_at').text).to eq task_add_1hour.created_at.to_s # 現在日時 + 1時間
+      expect(rows[3].find('.task_created_at').text).to eq task.created_at.to_s # 現在日時
     end
-    
+
+    it '終了期限の降順で並ぶ' do
+      click_link '▼'
+      sleep 0.5 # DOMを待つ
+      expect(rows[0].find('.task_expired_at').text).to eq task_add_1year.expired_at.to_s # 現在日時 + 1年
+      expect(rows[1].find('.task_expired_at').text).to eq task_add_1day.expired_at.to_s # 現在日時 + 1日
+      expect(rows[2].find('.task_expired_at').text).to eq task_add_1hour.expired_at.to_s # 現在日時 + 1時間
+      expect(rows[3].find('.task_expired_at').text).to eq task.expired_at.to_s # 現在日時
+    end
+
+    it '終了期限の昇順で並ぶ' do
+      click_link '▲'
+      sleep 0.5 # DOMを待つ
+      expect(rows[0].find('.task_expired_at').text).to eq task.expired_at.to_s # 現在日時
+      expect(rows[1].find('.task_expired_at').text).to eq task_add_1hour.expired_at.to_s # 現在日時 + 1時間
+      expect(rows[2].find('.task_expired_at').text).to eq task_add_1day.expired_at.to_s # 現在日時 + 1日
+      expect(rows[3].find('.task_expired_at').text).to eq task_add_1year.expired_at.to_s # 現在日時 + 1年
+    end
+
   end
 
   describe '詳細' do
