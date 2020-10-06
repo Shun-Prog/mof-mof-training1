@@ -21,5 +21,7 @@ module MofMofTraining1
 
     # ロケールファイルを複数読み込み可能にする
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
+
+    config.time_zone = 'Asia/Tokyo'
   end
 end
