@@ -2,21 +2,32 @@
 
 <%= link_to "新規作成", new_task_path %>
 
+<div class="task_search_box">
+    <%= search_form_for @search do |form| %>
+
+        <%= form.label :name %>
+        <%= form.search_field :name_cont %>
+
+        <%= form.label :status %>
+        <%= form.select :status_eq, Task.statuses.map {|k, v| [I18n.t("enums.task.status.#{k}"), v] }, {include_blank: true} %>
+
+        <%= form.submit "検索" %>
+    <% end %>
+</div>
+<br />
 <table>
     <tr>
         <th>
-            <%=Task.human_attribute_name("name")%>
+             <%= sort_link(@search, :name) %>
         </th>
         <th>
-            <%=Task.human_attribute_name("expired_at")%>
-            <%= link_to "▲", tasks_path(order: "asc") %>
-            <%= link_to "▼", tasks_path(order: "desc") %>
+            <%= sort_link(@search, :expired_at) %>
         </th>
         <th>
-            <%=Task.human_attribute_name("status")%>
+            <%= sort_link(@search, :status) %>
         </th>
         <th>
-            <%=Task.human_attribute_name("created_at")%>
+            <%= sort_link(@search, :created_at) %>
         </th>
     </tr>
     <% @tasks.each do |task| %>
