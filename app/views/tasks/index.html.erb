@@ -1,19 +1,27 @@
 <h1>Tasks#index</h1>
 
-<%= link_to '新規作成', new_task_path %>
+<%= link_to "新規作成", new_task_path %>
 
-<% @tasks.each do |task| %>
-
-    <div class="task">
-        <div class="task_column">
-            <%= task.name %>
-        </div>
-
-        <div class="task_column" id="task_created_at">
-            <%= task.created_at %>
-        </div>
-    </div>
-    
-    <%= link_to '詳細を見る', task_path(task) %>
-
-<% end %>
+<table>
+    <tr>
+        <th>
+            <%=Task.human_attribute_name("name")%>
+        </th>
+        <th>
+            <%=Task.human_attribute_name("expired_at")%>
+            <%= link_to "▲", tasks_path(order: "asc") %>
+            <%= link_to "▼", tasks_path(order: "desc") %>
+        </th>
+        <th>
+            <%=Task.human_attribute_name("created_at")%>
+        </th>
+    </tr>
+    <% @tasks.each do |task| %>
+        <tr class="task_row">
+            <td class="task_name"><%= task.name %></td>
+            <td class="task_expired_at"><%= task.expired_at %></td>
+            <td class="task_created_at"><%= task.created_at %></td>
+            <td><%= link_to "詳細", task_path(task) %></td>
+        </tr>
+    <% end %>
+</table>

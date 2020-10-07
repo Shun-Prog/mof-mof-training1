@@ -6,7 +6,14 @@
     <%= @task.description %>
 </div>
 <div>
-    <%= @task.created_at %>
+    <span class="task_expired_at">
+        <%= @task.expired_at %>
+    </span>
+</div>
+<div>
+    <span class="task_created_at">
+        <%= @task.created_at %>
+    </span>
 </div>
 
 <%= link_to '編集', edit_task_path(@task) %>
