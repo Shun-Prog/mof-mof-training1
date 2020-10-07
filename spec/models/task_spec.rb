@@ -6,7 +6,7 @@ RSpec.describe Task, type: :model do
 
     context 'タスク名が無い場合' do
       
-      let!(:task){ task = Task.new(description: 'description') }
+      let!(:task){ task = Task.new(description: 'description', expired_at: Date.today) }
       
       it '無効である' do
         expect(task).to be_invalid
@@ -21,7 +21,7 @@ RSpec.describe Task, type: :model do
   
     context 'タスク名が31文字以上の場合' do
 
-      let!(:task){ task = Task.new(name: 'a' * 31, description: 'description') }
+      let!(:task){ task = Task.new(name: 'a' * 31, description: 'description', expired_at: Date.today) }
   
       it '無効である' do
         expect(task).to be_invalid
@@ -35,7 +35,7 @@ RSpec.describe Task, type: :model do
     end
   
     context 'タスク名が30文字以内の場合' do
-      let!(:task){ task = Task.new(name: 'a' * 30, description: 'description') }
+      let!(:task){ task = Task.new(name: 'a' * 30, description: 'description', expired_at: Date.today) }
   
       it '有効である' do
         expect(task).to be_valid
@@ -64,7 +64,7 @@ RSpec.describe Task, type: :model do
 
     context 'タスク詳細が1001文字以上の場合' do
 
-      let!(:task){ task = Task.new(name: 'name', description: 'a' * 1001) }
+      let!(:task){ task = Task.new(name: 'name', description: 'a' * 1001, expired_at: Date.today) }
   
       it '無効である' do
         expect(task).to be_invalid
@@ -78,12 +78,44 @@ RSpec.describe Task, type: :model do
 
     context 'タスク詳細が1000文字以内の場合' do
 
-      let!(:task){ task = Task.new(name: 'name', description: 'a' * 1000) }
+      let!(:task){ task = Task.new(name: 'name', description: 'a' * 1000, expired_at: Date.today) }
   
       it '有効である' do
         expect(task).to be_valid
       end
   
+    end
+  end
+
+  describe '終了期限' do
+    context '終了期限が無い場合' do
+
+      let!(:task){ task = Task.new(name: 'name', description: 'description') }
+  
+      it '無効である' do
+        expect(task).to be_invalid
+      end
+  
+      it '入力不足のエラーメッセージが出る' do
+        task.valid?
+        expect(task.errors[:expired_at]).to include('は現在日以降の日付を入力してください')
+      end
+
+    end
+
+    context '終了期限が現在日より過去の日付の場合' do
+
+      let!(:task){ task = Task.new(name: 'name', description: 'description', expired_at: Date.today - 1.day) }
+  
+      it '無効である' do
+        expect(task).to be_invalid
+      end
+  
+      it '入力不足のエラーメッセージが出る' do
+        task.valid?
+        expect(task.errors[:expired_at]).to include('は現在日以降の日付を入力してください')
+      end
+
     end
   end
 end
