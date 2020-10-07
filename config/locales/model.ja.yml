@@ -13,6 +13,7 @@ ja:
           id: ID
           name: タスク名
           description: タスク詳細
+          status: ステータス
           expired_at: 終了期限
   attributes:
     created_at: 作成日
