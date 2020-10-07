@@ -7,9 +7,13 @@
 #  expired_at  :datetime
 #  name        :string
 #  priority    :integer
-#  status      :integer          default(0)
+#  status      :integer          default("ready")
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#
+# Indexes
+#
+#  index_tasks_on_status_and_name  (status,name)
 #
 require 'rails_helper'
 

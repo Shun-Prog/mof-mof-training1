@@ -30,22 +30,50 @@ RSpec.describe 'Tasks', type: :system do
       expect(rows[3].find('.task_created_at').text).to eq task.created_at.to_s # 現在日時
     end
 
-    it '終了期限の降順で並ぶ' do
-      click_link '▼'
-      sleep 0.5 # DOMを待つ
-      expect(rows[0].find('.task_expired_at').text).to eq task_add_1year.expired_at.to_s # 現在日時 + 1年
-      expect(rows[1].find('.task_expired_at').text).to eq task_add_1day.expired_at.to_s # 現在日時 + 1日
-      expect(rows[2].find('.task_expired_at').text).to eq task_add_1hour.expired_at.to_s # 現在日時 + 1時間
-      expect(rows[3].find('.task_expired_at').text).to eq task.expired_at.to_s # 現在日時
+    context '終了期限でソートした時' do
+
+      it '昇順で並ぶ' do
+        click_link Task.human_attribute_name("expired_at")
+        sleep 0.5 # DOMを待つ
+        expect(rows[0].find('.task_expired_at').text).to eq task.expired_at.to_s # 現在日時
+        expect(rows[1].find('.task_expired_at').text).to eq task_add_1hour.expired_at.to_s # 現在日時 + 1時間
+        expect(rows[2].find('.task_expired_at').text).to eq task_add_1day.expired_at.to_s # 現在日時 + 1日
+        expect(rows[3].find('.task_expired_at').text).to eq task_add_1year.expired_at.to_s # 現在日時 + 1年
+      end
+
+      it '降順で並ぶ' do
+        
+        2.times do  # 2回クリックして降順にする
+          click_link Task.human_attribute_name("expired_at")
+          sleep 0.5 # DOMを待つ
+        end
+        expect(rows[0].find('.task_expired_at').text).to eq task_add_1year.expired_at.to_s # 現在日時 + 1年
+        expect(rows[1].find('.task_expired_at').text).to eq task_add_1day.expired_at.to_s # 現在日時 + 1日
+        expect(rows[2].find('.task_expired_at').text).to eq task_add_1hour.expired_at.to_s # 現在日時 + 1時間
+        expect(rows[3].find('.task_expired_at').text).to eq task.expired_at.to_s # 現在日時
+      end
+
     end
 
-    it '終了期限の昇順で並ぶ' do
-      click_link '▲'
-      sleep 0.5 # DOMを待つ
-      expect(rows[0].find('.task_expired_at').text).to eq task.expired_at.to_s # 現在日時
-      expect(rows[1].find('.task_expired_at').text).to eq task_add_1hour.expired_at.to_s # 現在日時 + 1時間
-      expect(rows[2].find('.task_expired_at').text).to eq task_add_1day.expired_at.to_s # 現在日時 + 1日
-      expect(rows[3].find('.task_expired_at').text).to eq task_add_1year.expired_at.to_s # 現在日時 + 1年
+
+    context 'タスク名で検索した時' do
+      let(:task_for_search_name){ FactoryBot.create(:task, name: '検索用名称', expired_at: Time.now.next_year + 1.hours) }
+      it '検索した値で表示される' do
+        fill_in 'q_name_cont', with: task_for_search_name.name
+        click_button '検索'
+        expect(rows[0].find('.task_name').text).to eq task_for_search_name.name
+      end
+      
+    end
+
+    context 'ステータスで検索した時' do
+      let!(:task_for_search_status){ FactoryBot.create(:task, status: 'started', expired_at: Time.now.next_year + 1.hours) }
+      it '検索した値で表示される' do
+        value = Task.statuses[task_for_search_status.status].to_s
+        find("option[value='#{value}']").select_option
+        click_button '検索'
+        expect(rows[0].find('.task_status').text).to eq task_for_search_status.status_i18n
+      end
     end
 
   end
