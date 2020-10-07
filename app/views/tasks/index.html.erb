@@ -18,16 +18,16 @@
 <table>
     <tr>
         <th>
-             <%= sort_link(@search, :name) %>
+             <%=Task.human_attribute_name("name")%>
         </th>
         <th>
             <%= sort_link(@search, :expired_at) %>
         </th>
         <th>
-            <%= sort_link(@search, :status) %>
+            <%=Task.human_attribute_name("status")%>
         </th>
         <th>
-            <%= sort_link(@search, :created_at) %>
+            <%=Task.human_attribute_name("created_at")%>
         </th>
     </tr>
     <% @tasks.each do |task| %>
