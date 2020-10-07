@@ -18,6 +18,7 @@ RSpec.describe 'Tasks', type: :system do
     
     it '一覧で表示される' do
       expect(page).to have_content task.name
+      expect(page).to have_content task.status_i18n
       expect(page).to have_content task.created_at
       expect(page).to have_content task.expired_at
     end
@@ -57,6 +58,7 @@ RSpec.describe 'Tasks', type: :system do
       visit task_path(task)
       expect(page).to have_content task.name
       expect(page).to have_content task.description
+      expect(page).to have_content task.status_i18n
       expect(page).to have_content task.expired_at
       expect(page).to have_content task.created_at
     end
@@ -81,6 +83,7 @@ RSpec.describe 'Tasks', type: :system do
       it '作成できる' do
         expect(page).to have_content name
         expect(page).to have_content description
+        expect(page).to have_content I18n.t("enums.task.status.ready")
         expect(page).to have_selector '.task_expired_at', text: expired_at.to_s
         expect(page).to have_selector '.task_created_at', text: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
         
@@ -120,6 +123,7 @@ RSpec.describe 'Tasks', type: :system do
       it '編集できる' do
         expect(page).to have_content name
         expect(page).to have_content description
+        expect(page).to have_content I18n.t("enums.task.status.ready")
         expect(page).to have_selector '.task_expired_at', text: expired_at.to_s
         expect(page).to have_selector '.task_created_at', text: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
       end

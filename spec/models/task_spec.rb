@@ -131,4 +131,16 @@ RSpec.describe Task, type: :model do
 
     end
   end
+
+  describe 'ステータス' do
+    context '初期状態' do
+
+      let!(:task){ task = Task.new(name: 'name', description: 'description') }
+  
+      it '未着手(ready)である' do
+        expect(task.status).to eq 'ready'
+      end
+    end
+  end
+
 end
