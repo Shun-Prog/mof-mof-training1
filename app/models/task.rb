@@ -7,7 +7,7 @@
 #  expired_at  :datetime
 #  name        :string
 #  priority    :integer
-#  status      :integer
+#  status      :integer          default(0)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -19,6 +19,8 @@ class Task < ApplicationRecord
     # 一時的にコメントアウト
     # validates :priority
     # validates :status, presence: true
+
+    enum status: { 'ready': 0, 'started': 1, 'done': 2 }
 
     def expired_at_valid?        
         errors.add(:expired_at, 'は現在日以降の日付を入力してください') if expired_at.nil? || Date.parse(expired_at.to_s) < Date.today
