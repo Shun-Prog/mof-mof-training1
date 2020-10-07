@@ -29,4 +29,6 @@ class Task < ApplicationRecord
         errors.add(:expired_at, 'は現在日以降の日付を入力してください') if expired_at.nil? || Date.parse(expired_at.to_s) < Date.today
     end
 
+    scope :recent, -> { order(created_at: :desc) }
+    
 end
