@@ -19,6 +19,7 @@ RSpec.describe 'Tasks', type: :system do
     it '一覧で表示される' do
       expect(page).to have_content task.name
       expect(page).to have_content task.status_i18n
+      expect(page).to have_content task.priority_i18n
       expect(page).to have_content task.created_at
       expect(page).to have_content task.expired_at
     end
@@ -55,6 +56,26 @@ RSpec.describe 'Tasks', type: :system do
 
     end
 
+    context '優先順位でソートした時' do
+
+      let!(:task_priority_low){ FactoryBot.create(:task, priority: 0) }
+      let!(:task_priority_high){ FactoryBot.create(:task, priority: 2) }
+ 
+      it '昇順で並ぶ' do
+        click_link Task.human_attribute_name("priority")
+        sleep 0.5 # DOMを待つ
+        expect(rows[0].find('.task_priority').text).to eq task_priority_low.priority_i18n
+      end
+
+      it '降順で並ぶ' do
+        2.times do  # 2回クリックして降順にする
+          click_link Task.human_attribute_name("priority")
+          sleep 0.5 # DOMを待つ
+        end
+        expect(rows[0].find('.task_priority').text).to eq task_priority_high.priority_i18n
+      end
+
+    end
 
     context 'タスク名で検索した時' do
       let(:task_for_search_name){ FactoryBot.create(:task, name: '検索用名称', expired_at: Time.now.next_year + 1.hours) }
@@ -87,6 +108,7 @@ RSpec.describe 'Tasks', type: :system do
       expect(page).to have_content task.name
       expect(page).to have_content task.description
       expect(page).to have_content task.status_i18n
+      expect(page).to have_content task.priority_i18n
       expect(page).to have_content task.expired_at
       expect(page).to have_content task.created_at
     end
@@ -112,6 +134,7 @@ RSpec.describe 'Tasks', type: :system do
         expect(page).to have_content name
         expect(page).to have_content description
         expect(page).to have_content I18n.t("enums.task.status.ready")
+        expect(page).to have_content I18n.t("enums.task.priority.low")
         expect(page).to have_selector '.task_expired_at', text: expired_at.to_s
         expect(page).to have_selector '.task_created_at', text: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
         
@@ -152,6 +175,7 @@ RSpec.describe 'Tasks', type: :system do
         expect(page).to have_content name
         expect(page).to have_content description
         expect(page).to have_content I18n.t("enums.task.status.ready")
+        expect(page).to have_content I18n.t("enums.task.priority.low")
         expect(page).to have_selector '.task_expired_at', text: expired_at.to_s
         expect(page).to have_selector '.task_created_at', text: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
       end

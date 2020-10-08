@@ -27,6 +27,9 @@
             <%=Task.human_attribute_name("status")%>
         </th>
         <th>
+            <%= sort_link(@search, :priority) %>
+        </th>
+        <th>
             <%=Task.human_attribute_name("created_at")%>
         </th>
     </tr>
@@ -35,6 +38,7 @@
             <td class="task_name"><%= task.name %></td>
             <td class="task_expired_at"><%= task.expired_at %></td>
             <td class="task_status"><%= task.status_i18n %></td>
+            <td class="task_priority"><%= task.priority_i18n %></td>
             <td class="task_created_at"><%= task.created_at %></td>
             <td><%= link_to "詳細", task_path(task) %></td>
         </tr>

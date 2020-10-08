@@ -6,7 +6,7 @@
 #  description :text
 #  expired_at  :datetime
 #  name        :string
-#  priority    :integer
+#  priority    :integer          default(0)
 #  status      :integer          default("ready")
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -143,6 +143,17 @@ RSpec.describe Task, type: :model do
   
       it '未着手(ready)である' do
         expect(task.status).to eq 'ready'
+      end
+    end
+  end
+
+  describe '優先順位' do
+    context '初期状態' do
+
+      let!(:task){ task = Task.new(name: 'name', description: 'description') }
+  
+      it '低(low)である' do
+        expect(task.priority).to eq 'low'
       end
     end
   end
