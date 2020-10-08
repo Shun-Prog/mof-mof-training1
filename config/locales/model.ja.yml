@@ -5,6 +5,10 @@ ja:
           ready: "未着手"
           started: "作業中"
           done: "完了"
+        priority:
+          low: "低"
+          medium: "中"
+          high: "高"
   activerecord:
     models:
       task: タスク 
