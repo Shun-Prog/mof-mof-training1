@@ -13,7 +13,7 @@
 #
 # Indexes
 #
-#  index_tasks_on_status_and_name  (status,name)
+#  index_tasks_on_status  (status)
 #
 class Task < ApplicationRecord
     validates :name, presence: true, length: { maximum: 30 }
