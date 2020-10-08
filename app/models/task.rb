@@ -7,9 +7,13 @@
 #  expired_at  :datetime
 #  name        :string
 #  priority    :integer
-#  status      :integer
+#  status      :integer          default("ready")
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#
+# Indexes
+#
+#  index_tasks_on_status  (status)
 #
 class Task < ApplicationRecord
     validates :name, presence: true, length: { maximum: 30 }
@@ -18,18 +22,13 @@ class Task < ApplicationRecord
     
     # 一時的にコメントアウト
     # validates :priority
-    # validates :status, presence: true
+
+    enum status: { 'ready': 0, 'started': 1, 'done': 2 }
 
     def expired_at_valid?        
         errors.add(:expired_at, 'は現在日以降の日付を入力してください') if expired_at.nil? || Date.parse(expired_at.to_s) < Date.today
     end
 
-    scope :sorted_by_expired_at, -> (order) {
-        case order
-        when 'asc' then order(expired_at: :asc)
-        when 'desc' then order(expired_at: :desc)
-        end
-    }
-
     scope :recent, -> { order(created_at: :desc) }
+    
 end

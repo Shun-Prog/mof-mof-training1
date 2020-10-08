@@ -61,3 +61,7 @@ gem 'pg'
 gem 'annotate'
 
 gem 'rails-i18n'
+
+gem 'enum_help'
+
+gem 'ransack'
