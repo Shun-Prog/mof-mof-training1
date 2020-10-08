@@ -3,7 +3,7 @@ class TasksController < ApplicationController
 
   def index
     @search = Task.ransack(params[:q])
-    @tasks = @search.result.recent
+    @tasks = @search.result.recent.page(params[:page])
   end
   
   def show
