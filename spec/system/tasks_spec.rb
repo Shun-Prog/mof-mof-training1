@@ -58,25 +58,21 @@ RSpec.describe 'Tasks', type: :system do
 
     context '優先順位でソートした時' do
 
+      let!(:task_priority_low){ FactoryBot.create(:task, priority: 0) }
+      let!(:task_priority_high){ FactoryBot.create(:task, priority: 2) }
+ 
       it '昇順で並ぶ' do
         click_link Task.human_attribute_name("priority")
         sleep 0.5 # DOMを待つ
-        expect(rows[0].find('.task_priority').text).to eq task.priority.to_s # 現在日時
-        expect(rows[1].find('.task_priority').text).to eq task_add_1hour.priority.to_s # 現在日時 + 1時間
-        expect(rows[2].find('.task_priority').text).to eq task_add_1day.priority.to_s # 現在日時 + 1日
-        expect(rows[3].find('.task_priority').text).to eq task_add_1year.priority.to_s # 現在日時 + 1年
+        expect(rows[0].find('.task_priority').text).to eq task_priority_low.priority_i18n
       end
 
       it '降順で並ぶ' do
-        
         2.times do  # 2回クリックして降順にする
           click_link Task.human_attribute_name("priority")
           sleep 0.5 # DOMを待つ
         end
-        expect(rows[0].find('.task_priority').text).to eq task_add_1year.priority.to_s # 現在日時 + 1年
-        expect(rows[1].find('.task_priority').text).to eq task_add_1day.priority.to_s # 現在日時 + 1日
-        expect(rows[2].find('.task_priority').text).to eq task_add_1hour.priority.to_s # 現在日時 + 1時間
-        expect(rows[3].find('.task_priority').text).to eq task.priority.to_s # 現在日時
+        expect(rows[0].find('.task_priority').text).to eq task_priority_high.priority_i18n
       end
 
     end
