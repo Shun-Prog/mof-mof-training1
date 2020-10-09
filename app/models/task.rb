@@ -6,16 +6,24 @@
 #  description :text
 #  expired_at  :datetime
 #  name        :string
-#  priority    :integer          default(0)
+#  priority    :integer          default("low")
 #  status      :integer          default("ready")
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  user_id     :bigint
 #
 # Indexes
 #
-#  index_tasks_on_status  (status)
+#  index_tasks_on_status   (status)
+#  index_tasks_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
 #
 class Task < ApplicationRecord
+    belongs_to :user, optional: true # ログイン処理実装後に optional: true 外す
+    
     validates :name, presence: true, length: { maximum: 30 }
     validates :description, presence: true, length: { maximum: 1000 }
     validate :expired_at_valid?
