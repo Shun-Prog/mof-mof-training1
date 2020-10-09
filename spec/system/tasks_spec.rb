@@ -20,15 +20,15 @@ RSpec.describe 'Tasks', type: :system do
       expect(page).to have_content task.name
       expect(page).to have_content task.status_i18n
       expect(page).to have_content task.priority_i18n
-      expect(page).to have_content task.created_at
-      expect(page).to have_content task.expired_at
+      expect(page).to have_content I18n.l(task.created_at)
+      expect(page).to have_content I18n.l(task.expired_at)
     end
 
     it '作成日の降順で並ぶ' do
-      expect(rows[0].find('.task_created_at').text).to eq task_add_1year.created_at.to_s # 現在日時 + 1年
-      expect(rows[1].find('.task_created_at').text).to eq task_add_1day.created_at.to_s # 現在日時 + 1日
-      expect(rows[2].find('.task_created_at').text).to eq task_add_1hour.created_at.to_s # 現在日時 + 1時間
-      expect(rows[3].find('.task_created_at').text).to eq task.created_at.to_s # 現在日時
+      expect(rows[0].find('.task_created_at').text).to eq I18n.l(task_add_1year.created_at).to_s # 現在日時 + 1年
+      expect(rows[1].find('.task_created_at').text).to eq I18n.l(task_add_1day.created_at).to_s # 現在日時 + 1日
+      expect(rows[2].find('.task_created_at').text).to eq I18n.l(task_add_1hour.created_at).to_s # 現在日時 + 1時間
+      expect(rows[3].find('.task_created_at').text).to eq I18n.l(task.created_at).to_s # 現在日時
     end
 
     context '終了期限でソートした時' do
@@ -36,10 +36,10 @@ RSpec.describe 'Tasks', type: :system do
       it '昇順で並ぶ' do
         click_link Task.human_attribute_name("expired_at")
         sleep 0.5 # DOMを待つ
-        expect(rows[0].find('.task_expired_at').text).to eq task.expired_at.to_s # 現在日時
-        expect(rows[1].find('.task_expired_at').text).to eq task_add_1hour.expired_at.to_s # 現在日時 + 1時間
-        expect(rows[2].find('.task_expired_at').text).to eq task_add_1day.expired_at.to_s # 現在日時 + 1日
-        expect(rows[3].find('.task_expired_at').text).to eq task_add_1year.expired_at.to_s # 現在日時 + 1年
+        expect(rows[0].find('.task_expired_at').text).to eq I18n.l(task.expired_at).to_s # 現在日時
+        expect(rows[1].find('.task_expired_at').text).to eq I18n.l(task_add_1hour.expired_at).to_s # 現在日時 + 1時間
+        expect(rows[2].find('.task_expired_at').text).to eq I18n.l(task_add_1day.expired_at).to_s # 現在日時 + 1日
+        expect(rows[3].find('.task_expired_at').text).to eq I18n.l(task_add_1year.expired_at).to_s # 現在日時 + 1年
       end
 
       it '降順で並ぶ' do
@@ -48,10 +48,10 @@ RSpec.describe 'Tasks', type: :system do
           click_link Task.human_attribute_name("expired_at")
           sleep 0.5 # DOMを待つ
         end
-        expect(rows[0].find('.task_expired_at').text).to eq task_add_1year.expired_at.to_s # 現在日時 + 1年
-        expect(rows[1].find('.task_expired_at').text).to eq task_add_1day.expired_at.to_s # 現在日時 + 1日
-        expect(rows[2].find('.task_expired_at').text).to eq task_add_1hour.expired_at.to_s # 現在日時 + 1時間
-        expect(rows[3].find('.task_expired_at').text).to eq task.expired_at.to_s # 現在日時
+        expect(rows[0].find('.task_expired_at').text).to eq I18n.l(task_add_1year.expired_at).to_s # 現在日時 + 1年
+        expect(rows[1].find('.task_expired_at').text).to eq I18n.l(task_add_1day.expired_at).to_s # 現在日時 + 1日
+        expect(rows[2].find('.task_expired_at').text).to eq I18n.l(task_add_1hour.expired_at).to_s # 現在日時 + 1時間
+        expect(rows[3].find('.task_expired_at').text).to eq I18n.l(task.expired_at).to_s # 現在日時
       end
 
     end
@@ -109,8 +109,8 @@ RSpec.describe 'Tasks', type: :system do
       expect(page).to have_content task.description
       expect(page).to have_content task.status_i18n
       expect(page).to have_content task.priority_i18n
-      expect(page).to have_content task.expired_at
-      expect(page).to have_content task.created_at
+      expect(page).to have_content I18n.l(task.expired_at)
+      expect(page).to have_content I18n.l(task.created_at)
     end
 
   end
@@ -135,8 +135,8 @@ RSpec.describe 'Tasks', type: :system do
         expect(page).to have_content description
         expect(page).to have_content I18n.t("enums.task.status.ready")
         expect(page).to have_content I18n.t("enums.task.priority.low")
-        expect(page).to have_selector '.task_expired_at', text: expired_at.to_s
-        expect(page).to have_selector '.task_created_at', text: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
+        expect(page).to have_selector '.task_expired_at', text: I18n.l(expired_at).to_s
+        expect(page).to have_selector '.task_created_at', text: /^\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}/
         
       end
     end
@@ -176,8 +176,8 @@ RSpec.describe 'Tasks', type: :system do
         expect(page).to have_content description
         expect(page).to have_content I18n.t("enums.task.status.ready")
         expect(page).to have_content I18n.t("enums.task.priority.low")
-        expect(page).to have_selector '.task_expired_at', text: expired_at.to_s
-        expect(page).to have_selector '.task_created_at', text: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
+        expect(page).to have_selector '.task_expired_at', text: I18n.l(expired_at).to_s
+        expect(page).to have_selector '.task_created_at', text: /^\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}/
       end
     end
   end
