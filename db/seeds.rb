@@ -1,5 +1,4 @@
 if Rails.env.development?
-  User.delete_all
   user = User.create!(
     name: "ダミーユーザー",
     email: "dummy@example.com",
