@@ -1,49 +1,49 @@
-<h1>Tasks#index</h1>
+<div class="container-fluid">
+    <div class="tasks_top_boxies">
+        <div class="task_search_box form-inline">
+            <%= search_form_for @search do |form| %>
 
-<%= link_to "新規作成", new_task_path %>
+            <%= form.search_field :name_cont, class: "form-control", placeholder: "タスク名" %>
+            <%= form.select :status_eq, Task.statuses.map {|k, v| [I18n.t("enums.task.status.#{k}"), v] }, {include_blank: true}, class: "form-control mr-sm-2" %>
 
-<div class="task_search_box">
-    <%= search_form_for @search do |form| %>
-
-        <%= form.label :name %>
-        <%= form.search_field :name_cont %>
-
-        <%= form.label :status %>
-        <%= form.select :status_eq, Task.statuses.map {|k, v| [I18n.t("enums.task.status.#{k}"), v] }, {include_blank: true} %>
-
-        <%= form.submit "検索" %>
-    <% end %>
-</div>
-<br />
-<table>
-    <tr>
-        <th>
-             <%=Task.human_attribute_name("name")%>
-        </th>
-        <th>
-            <%= sort_link(@search, :expired_at) %>
-        </th>
-        <th>
-            <%=Task.human_attribute_name("status")%>
-        </th>
-        <th>
-            <%= sort_link(@search, :priority) %>
-        </th>
-        <th>
-            <%=Task.human_attribute_name("created_at")%>
-        </th>
-    </tr>
-    <% @tasks.each do |task| %>
+            <%= form.submit "検索", class: "btn btn-primary" %>
+            <% end %>
+        </div>
+        <div class="tasks_pagenation">
+            <%= paginate @tasks, theme: 'twitter-bootstrap-4' %>
+        </div>
+        <%= link_to "新規作成", new_task_path, class: "btn btn-success create_task_btn" %>
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                <%=Task.human_attribute_name("name")%>
+            </th>
+            <th>
+                <%=Task.human_attribute_name("status")%>
+            </th>
+            <th>
+                <%= sort_link(@search, :priority) %>
+            </th>
+            <th>
+                <%= sort_link(@search, :expired_at) %>
+            </th>
+            <th>
+                <%=Task.human_attribute_name("created_at")%>
+            </th>
+            <th>
+            </th>
+        </tr>
+        <% @tasks.each do |task| %>
         <tr class="task_row">
             <td class="task_name"><%= task.name %></td>
-            <td class="task_expired_at"><%= task.expired_at %></td>
             <td class="task_status"><%= task.status_i18n %></td>
             <td class="task_priority"><%= task.priority_i18n %></td>
-            <td class="task_created_at"><%= task.created_at %></td>
+            <td class="task_expired_at"><%= l task.expired_at %></td>
+            <td class="task_created_at"><%= l task.created_at %></td>
             <td><%= link_to "詳細", task_path(task) %></td>
         </tr>
-    <% end %>
-    
-</table>
+        <% end %>
 
-<%= paginate @tasks %>
+    </table>
+</div>

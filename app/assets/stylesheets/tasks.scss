@@ -1,0 +1,51 @@
+// index
+
+// タスク一覧上部のボックス
+.tasks_top_boxies {
+  display: flex;
+  margin-bottom: 10px;
+
+  // 検索ボックス
+  .task_search_box {
+    display: inline-block;
+    margin-right: 50px;
+  }
+
+  // ページネーションボックス
+  .tasks_pagenation {
+    display: inline-block;
+    height: 38px;
+  }
+
+  // 新規作成ボタン
+  .create_task_btn {
+    margin: 0 0 0 auto;
+  }
+}
+
+
+// _form
+
+form {
+  width: 600px;
+}
+
+.field {
+  display: flex;
+  margin: 10px;
+  white-space: nowrap;
+}
+
+.custom-select {
+  width: 100px;
+}
+
+label {
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle; 
+  margin-bottom: 0;
+}
+
+// show
+

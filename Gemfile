@@ -67,3 +67,9 @@ gem 'enum_help'
 gem 'ransack'
 
 gem 'kaminari'
+
+gem 'bootstrap'
+
+gem 'bootstrap4-kaminari-views'
+
+gem 'jquery-rails'
