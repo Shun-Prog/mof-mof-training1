@@ -4,10 +4,10 @@ RSpec.describe 'Tasks', type: :system do
 
   describe '一覧' do
 
-    let!(:task){ FactoryBot.create(:task, expired_at: Time.now.next_year) }
-    let!(:task_add_1year){ FactoryBot.create(:task, expired_at: Time.now.next_year + 1.years, created_at: Time.now + 1.years) }
-    let!(:task_add_1day){ FactoryBot.create(:task, expired_at: Time.now.next_year + 1.days, created_at: Time.now + 1.days) }
-    let!(:task_add_1hour){ FactoryBot.create(:task, expired_at: Time.now.next_year + 1.hours, created_at: Time.now + 1.hours) }
+    let!(:task){ create(:task, expired_at: Time.now.next_year) }
+    let!(:task_add_1year){ create(:task, expired_at: Time.now.next_year + 1.years, created_at: Time.now + 1.years) }
+    let!(:task_add_1day){ create(:task, expired_at: Time.now.next_year + 1.days, created_at: Time.now + 1.days) }
+    let!(:task_add_1hour){ create(:task, expired_at: Time.now.next_year + 1.hours, created_at: Time.now + 1.hours) }
 
     # タスク一覧のtable rowを取得
     let(:rows) { page.all('.task_row') }
@@ -58,8 +58,8 @@ RSpec.describe 'Tasks', type: :system do
 
     context '優先順位でソートした時' do
 
-      let!(:task_priority_low){ FactoryBot.create(:task, priority: 0) }
-      let!(:task_priority_high){ FactoryBot.create(:task, priority: 2) }
+      let!(:task_priority_low){ create(:task, priority: 0) }
+      let!(:task_priority_high){ create(:task, priority: 2) }
  
       it '昇順で並ぶ' do
         click_link Task.human_attribute_name("priority")
@@ -78,7 +78,7 @@ RSpec.describe 'Tasks', type: :system do
     end
 
     context 'タスク名で検索した時' do
-      let(:task_for_search_name){ FactoryBot.create(:task, name: '検索用名称', expired_at: Time.now.next_year + 1.hours) }
+      let(:task_for_search_name){ create(:task, name: '検索用名称', expired_at: Time.now.next_year + 1.hours) }
       it '検索した値で表示される' do
         fill_in 'q_name_cont', with: task_for_search_name.name
         click_button '検索'
@@ -88,7 +88,7 @@ RSpec.describe 'Tasks', type: :system do
     end
 
     context 'ステータスで検索した時' do
-      let!(:task_for_search_status){ FactoryBot.create(:task, status: 'started', expired_at: Time.now.next_year + 1.hours) }
+      let!(:task_for_search_status){ create(:task, status: 'started', expired_at: Time.now.next_year + 1.hours) }
       it '検索した値で表示される' do
         value = Task.statuses[task_for_search_status.status].to_s
         find("option[value='#{value}']").select_option
@@ -101,7 +101,7 @@ RSpec.describe 'Tasks', type: :system do
 
   describe '詳細' do
 
-    let!(:task){ FactoryBot.create(:task) }
+    let!(:task){ create(:task) }
 
     it '詳細が表示される' do
       visit task_path(task)
@@ -156,7 +156,7 @@ RSpec.describe 'Tasks', type: :system do
 
   describe '編集' do
 
-    let!(:task){ FactoryBot.create(:task) }
+    let!(:task){ create(:task) }
 
     before do
       visit edit_task_path(task)
