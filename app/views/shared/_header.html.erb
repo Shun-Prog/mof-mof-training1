@@ -1,5 +1,12 @@
 <header>
   <nav class="navbar fixed-top navbar-dark bg-primary">
     <a class="navbar-brand" href="/">タスク管理</a>
+    <% if logged_in? %>
+    <ul class="nav">
+      <li class="nav-item">
+        <%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link text-white" %>
+      </li>
+    </ul>
+    <% end %>
   </nav>
 </header>
