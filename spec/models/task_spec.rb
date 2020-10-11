@@ -25,6 +25,19 @@ require 'rails_helper'
 
 RSpec.describe Task, type: :model do
 
+  describe 'アソシエーション' do
+
+    describe 'belongs_to' do
+      let!(:user) { create(:user) }
+      let!(:task) { create(:task, user_id: user.id) }
+
+      it 'TaskとUserは1対多の関係になる' do
+        expect(task.user).to eq user
+      end
+
+    end
+  end
+
   describe 'タスク名のバリデーション' do
 
     context 'タスク名が無い場合' do
