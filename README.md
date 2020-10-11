@@ -26,7 +26,7 @@ https://github.com/everyleaf/el-training
 id: integer  
 name: string  
 email: string  
-password_digest:: string 
+password_digest: string 
   
 * **tasks**  
 id: integer  
