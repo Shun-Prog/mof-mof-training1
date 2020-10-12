@@ -22,7 +22,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Task < ApplicationRecord
-    belongs_to :user, optional: true # ログイン処理実装後に optional: true 外す
+    belongs_to :user
     
     validates :name, presence: true, length: { maximum: 30 }
     validates :description, presence: true, length: { maximum: 1000 }

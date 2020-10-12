@@ -1,8 +1,9 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:edit, :show, :update, :destroy]
+  before_action :auth_session
 
   def index
-    @search = Task.ransack(params[:q])
+    @search = current_user.tasks.ransack(params[:q])
     @tasks = @search.result.recent.page(params[:page])
   end
   
@@ -27,7 +28,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.new(task_params)
     if @task.save
       flash[:success] = "タスクを作成しました"
       redirect_to @task
@@ -49,7 +50,7 @@ class TasksController < ApplicationController
   
   private
     def set_task
-      @task = Task.find(params[:id])
+      @task = current_user.tasks.find(params[:id])
     end
 
     def task_params
