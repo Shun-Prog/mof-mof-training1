@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Sessions', type: :system do
+RSpec.describe "Sessions", type: :system do
 
-  context 'ログイン時' do
+  context "ログイン時" do
 
     before do
       login(user)
@@ -12,7 +12,7 @@ RSpec.describe 'Sessions', type: :system do
 
       let(:user) { create(:user) }
 
-      it 'ログインできる' do
+      it "ログインできる" do
         expect(page).to have_content "ログインしました"
       end
 
@@ -22,7 +22,7 @@ RSpec.describe 'Sessions', type: :system do
 
       let(:user) { build(:user) }
 
-      it 'ログインできない' do
+      it "ログインできない" do
         expect(page).to have_content "ログインできませんでした"
       end
 
@@ -30,16 +30,16 @@ RSpec.describe 'Sessions', type: :system do
  
   end
 
-  describe 'ログアウト' do
+  describe "ログアウト" do
 
     let(:user) { create(:user) }
 
     before do
       login(user)
-      click_link 'ログアウト'
+      click_link "ログアウト"
     end
 
-    it 'ログアウトできる' do
+    it "ログアウトできる" do
         expect(page).to have_content "ログアウトしました"
     end
   end
