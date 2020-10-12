@@ -11,8 +11,8 @@ RSpec.describe 'Tasks', type: :system do
 
     context '初期表示時' do
 
-      let!(:task){ create(:task, user_id: user.id) }
-      let!(:task_add_1day){ create(:task, created_at: Time.now + 1.days, user_id: user.id) }
+      let!(:task){ create(:task, user: user) }
+      let!(:task_add_1day){ create(:task, created_at: Time.current + 1.days, user: user) }
 
       before do
         login(user)
@@ -36,9 +36,9 @@ RSpec.describe 'Tasks', type: :system do
     describe '閲覧範囲のテスト' do
 
       let(:user_a) { create(:user) }
-      let!(:user_a_task) { create(:task, user_id: user_a.id) }
+      let!(:user_a_task) { create(:task, user: user_a) }
       let(:user_b) { create(:user) }
-      let!(:user_b_task) { create(:task, user_id: user_b.id) }
+      let!(:user_b_task) { create(:task, user: user_b) }
 
       context 'ユーザーAでログインした時' do
 
@@ -70,8 +70,8 @@ RSpec.describe 'Tasks', type: :system do
     
     context '終了期限でソートした時' do
 
-      let!(:task){ create(:task, user_id: user.id) }
-      let!(:task_add_1day){ create(:task, expired_at: Time.now + 1.days, user_id: user.id) }
+      let!(:task){ create(:task, user: user) }
+      let!(:task_add_1day){ create(:task, expired_at: Time.current + 1.days, user: user) }
 
       before do
         login(user)
@@ -99,8 +99,8 @@ RSpec.describe 'Tasks', type: :system do
 
     context '優先順位でソートした時' do
 
-      let!(:task_priority_low){ create(:task, priority: 0, user_id: user.id) }
-      let!(:task_priority_high){ create(:task, priority: 2, user_id: user.id) }
+      let!(:task_priority_low){ create(:task, priority: 0, user: user) }
+      let!(:task_priority_high){ create(:task, priority: 2, user: user) }
 
       before do
         login(user)
@@ -124,7 +124,7 @@ RSpec.describe 'Tasks', type: :system do
 
     context 'タスク名で検索した時' do
 
-      let(:task){ create(:task, user_id: user.id) }
+      let(:task){ create(:task, user: user) }
 
       before do
         login(user)
@@ -140,7 +140,7 @@ RSpec.describe 'Tasks', type: :system do
 
     context 'ステータスで検索した時' do
 
-      let!(:task){ create(:task, status: :started, user_id: user.id) }
+      let!(:task){ create(:task, status: :started, user: user) }
 
       before do
         login(user)
@@ -158,7 +158,7 @@ RSpec.describe 'Tasks', type: :system do
 
   describe '詳細' do
 
-    let!(:task){ create(:task, user_id: user.id) }
+    let!(:task){ create(:task, user: user) }
 
     before do
       login(user)
@@ -191,7 +191,7 @@ RSpec.describe 'Tasks', type: :system do
 
       let(:name) { 'タスク名' }
       let(:description) { 'タスク詳細' }
-      let(:expired_at) { Time.now }
+      let(:expired_at) { Time.current }
 
       it '作成できる' do
         expect(page).to have_content name
@@ -207,7 +207,7 @@ RSpec.describe 'Tasks', type: :system do
 
       let(:name) { '' }
       let(:description) { 'タスク詳細' }
-      let(:expired_at) { Time.now }
+      let(:expired_at) { Time.current }
 
       it 'エラーになる' do
         expect(page).to have_content 'タスク名を入力してください'
@@ -218,7 +218,7 @@ RSpec.describe 'Tasks', type: :system do
 
   describe '編集' do
 
-    let!(:task){ create(:task, user_id: user.id) }
+    let!(:task){ create(:task, user: user) }
 
     before do
       login(user)

@@ -2,15 +2,15 @@ require 'rails_helper'
 
 RSpec.describe 'Sessions', type: :system do
 
-  describe 'ログイン' do
+  context 'ログイン時' do
+
+    before do
+      login(user)
+    end
 
     context "ログインできるユーザーが存在する時" do
 
       let(:user) { create(:user) }
-
-      before do
-        login(user)
-      end
 
       it 'ログインできる' do
         expect(page).to have_content "ログインしました"
@@ -21,10 +21,6 @@ RSpec.describe 'Sessions', type: :system do
     context "ログインできるユーザーが存在しない時" do
 
       let(:user) { build(:user) }
-
-      before do
-        login(user)
-      end
 
       it 'ログインできない' do
         expect(page).to have_content "ログインできませんでした"

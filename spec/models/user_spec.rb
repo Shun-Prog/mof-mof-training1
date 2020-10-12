@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
     describe 'has_many' do
 
       let!(:user) { create(:user) }
-      let!(:tasks) { create_pair(:task, user_id: user.id) }
+      let!(:tasks) { create_pair(:task, user: user) }
 
       it 'UserとTaskは1対多の関係になる' do
         expect(user.tasks).to match_array tasks
@@ -18,7 +18,7 @@ RSpec.describe User, type: :model do
     context 'ユーザーを削除した時' do
 
       let!(:user) { create(:user) }
-      let!(:tasks) { create(:task, user_id: user.id) }
+      let!(:tasks) { create(:task, user: user) }
 
       it '関連するタスクが削除される' do
         expect{ user.destroy }.to change{ Task.count }.by(-1)

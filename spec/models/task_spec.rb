@@ -29,7 +29,7 @@ RSpec.describe Task, type: :model do
 
     describe 'belongs_to' do
       let!(:user) { create(:user) }
-      let!(:task) { create(:task, user_id: user.id) }
+      let!(:task) { create(:task, user: user) }
 
       it 'TaskとUserは1対多の関係になる' do
         expect(task.user).to eq user
