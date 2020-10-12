@@ -218,7 +218,7 @@ RSpec.describe 'Tasks', type: :system do
 
   describe '編集' do
 
-    let!(:task){ create(:task) }
+    let!(:task){ create(:task, user_id: user.id) }
 
     before do
       login(user)
