@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <% if user.errors.any? %>
+  <div>
+    <ul>
+      <% user.errors.full_messages.each do |msg| %>
+      <li class="text-danger"><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <div class="form-group row">
+    <%= form_with  model: [:admin, @user], local: true do |form| %>
+
+    <div class="field">
+      <%= form.text_field :name, class: "form-control", placeholder: User.human_attribute_name("name") %>
+    </div>
+
+    <div class="field">
+      <%= form.text_area :email, class: "form-control", placeholder: User.human_attribute_name("email") %>
+    </div>
+    
+    <div class="field">
+      <%= form.text_area :password, class: "form-control", placeholder: User.human_attribute_name("password") %>
+    </div>
+
+    <%= form.submit "保存", class: "btn btn-success create_user_btn"%>
+
+    <% end %>
+  </div>
+</div>
