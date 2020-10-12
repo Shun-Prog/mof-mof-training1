@@ -17,11 +17,11 @@
     </div>
 
     <div class="field">
-      <%= form.text_area :email, class: "form-control", placeholder: User.human_attribute_name("email") %>
+      <%= form.email_field :email, class: "form-control", placeholder: User.human_attribute_name("email") %>
     </div>
     
     <div class="field">
-      <%= form.text_area :password, class: "form-control", placeholder: User.human_attribute_name("password") %>
+      <%= form.password_field :password, class: "form-control", placeholder: User.human_attribute_name("password") %>
     </div>
 
     <%= form.submit "保存", class: "btn btn-success create_user_btn"%>
