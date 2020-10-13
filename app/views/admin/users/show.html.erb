@@ -7,11 +7,17 @@
                 </span>
             </h4>
             <p class="card-text">
+                <%=User.human_attribute_name("email")%> :
                 <span class="user_email">
                     <%= @user.email %>
                 </span>
             </p>
-            
+            <p class="card-text">
+                <%=User.human_attribute_name("admin")%> :
+                <span class="user_email">
+                    <%= @user.admin? ? '有り': '無し' %>
+                </span>
+            </p>
             <%= link_to '編集', edit_admin_user_path(@user) %>
             <%= link_to "削除", admin_user_path(@user), method: :delete, data: { confirm: "ユーザーを削除してもよろしいですか？" } %>
             <%= link_to '一覧に戻る', admin_users_path %>
