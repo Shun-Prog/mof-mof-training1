@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :bigint           not null, primary key
+#  admin           :boolean          default(FALSE), not null
+#  email           :string
+#  name            :string
+#  password_digest :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
 require "rails_helper"
 
 RSpec.describe User, type: :model do
@@ -17,11 +29,11 @@ RSpec.describe User, type: :model do
 
     context "ユーザーを削除した時" do
 
-      let!(:user) { create(:user) }
-      let!(:tasks) { create(:task, user: user) }
+      let!(:non_admin_user) { create(:user, admin: false) }
+      let!(:tasks) { create(:task, user: non_admin_user) }
 
       it "関連するタスクが削除される" do
-        expect{ user.destroy }.to change{ Task.count }.by(-1)
+        expect{ non_admin_user.destroy }.to change{ Task.count }.by(-1)
       end
 
     end
@@ -181,6 +193,52 @@ RSpec.describe User, type: :model do
       it "文字数不足のエラーメッセージが出る" do
         user.valid?
         expect(user.errors[:password]).to include("は8文字以上で入力してください")
+      end
+
+    end
+
+    context "確認用パスワードと一致しない時" do
+
+      let!(:user){ build(:user, password: "a" * 8, password_confirmation: "b" * 8) }
+      
+      it "無効である" do
+        expect(user).to be_invalid
+      end
+
+      it "不一致のエラーメッセージが出る" do
+        user.valid?
+        expect(user.errors[:password_confirmation]).to include("とパスワードの入力が一致しません")
+      end
+
+    end
+
+  end
+
+  describe "管理者権限" do
+
+    let!(:user){ create(:user) }
+
+    context "管理者が1ユーザーの状態管理者権限を無しにする時" do
+
+      before do
+        user.admin = false
+        user.valid?
+      end
+      
+      it "無効である" do
+        expect(user.errors[:admin]).to include("は最低1ユーザー保持する必要があります")
+      end
+      
+    end
+
+    context "管理者が1ユーザーの状態で削除する時" do
+
+      before do
+        user.destroy
+      end
+
+      it "無効である" do
+        expect(user.errors[:admin]).to include("は最低1ユーザー保持する必要があります")
       end
 
     end

@@ -14,6 +14,9 @@
                 タスク数
             </th>
             <th>
+                <%=User.human_attribute_name("admin")%>
+            </th>
+            <th>
             </th>
         </tr>
         <% @users.each do |user| %>
@@ -21,6 +24,7 @@
             <td class="user_name"><%= user.name %></td>
             <td class="user_email"><%= user.email %></td>
             <td><%= link_to user.tasks.count, admin_user_tasks_path(user) %></td>
+            <td class="user_admin"><%= user.admin? ? '有り': '無し' %></td>
             <td><%= link_to "詳細", admin_user_path(user) %></td>
         </tr>
         <% end %>

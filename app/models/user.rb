@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  admin           :boolean          default(FALSE), not null
 #  email           :string
 #  name            :string
 #  password_digest :string
@@ -27,8 +28,35 @@ class User < ApplicationRecord
     presence: true,
     length: { minimum: 8 }
 
-  before_save do
-    self.email.downcase! # メールアドレスは小文字で統一 
-  end
+  validate :admin_change_validation, if: -> { will_save_change_to_admin? && !self.admin? }
+
+  before_save :downcase_email
+
+  before_destroy :admin_destory_validation, if: -> { self.admin? }
+
+  private
+
+    def admin_change_validation
+        set_admin_error_message if last_one_admin?
+    end
+
+    def admin_destory_validation
+      if last_one_admin?
+        set_admin_error_message 
+        throw(:abort)
+      end
+    end
+
+    def last_one_admin?
+      User.where(admin: true).count == 1
+    end
+
+    def set_admin_error_message
+      errors.add(:admin, 'は最低1ユーザー保持する必要があります')
+    end
+
+    def downcase_email
+      self.email.downcase! 
+    end
 
 end

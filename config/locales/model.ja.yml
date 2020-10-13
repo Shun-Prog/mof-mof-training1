@@ -26,6 +26,8 @@ ja:
           name: ユーザー名
           email: メールアドレス
           password: パスワード
+          password_confirmation: パスワード(確認用)
+          admin: 管理者権限
   attributes:
     created_at: 作成日
     updated_at: 更新日

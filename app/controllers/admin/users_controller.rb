@@ -1,7 +1,8 @@
 class Admin::UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :show, :update, :destroy]
   before_action :auth_session
-
+  before_action :require_admin
+  before_action :set_user, only: [:edit, :show, :update, :destroy]
+  
   def index
     @users = User.all
   end
@@ -55,7 +56,11 @@ class Admin::UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:name, :email, :password)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :admin)
+    end
+
+    def require_admin
+      redirect_to root_path unless current_user.admin?
     end
 
 end
