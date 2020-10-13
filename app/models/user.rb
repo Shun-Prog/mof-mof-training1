@@ -28,16 +28,31 @@ class User < ApplicationRecord
     presence: true,
     length: { minimum: 8 }
 
-  validate :admin_validation, if: :will_save_change_to_admin?
+  validate :admin_change_validation, if: -> { will_save_change_to_admin? && !self.admin? }
 
   before_save :downcase_email
 
+  before_destroy :admin_destory_validation, if: -> { self.admin? }
+
   private
 
-    def admin_validation
-      return if self.admin?
-      admin_count = User.where(admin: true).count
-      errors.add(:admin, 'は最低1ユーザー保持する必要があります') if admin_count == 1
+    def admin_change_validation
+        set_admin_error_message if last_one_admin?
+    end
+
+    def admin_destory_validation
+      if last_one_admin?
+        set_admin_error_message 
+        throw(:abort)
+      end
+    end
+
+    def last_one_admin?
+      User.where(admin: true).count == 1
+    end
+
+    def set_admin_error_message
+      errors.add(:admin, 'は最低1ユーザー保持する必要があります')
     end
 
     def downcase_email
