@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_secure_password
   has_many :tasks, dependent: :destroy
 
+  before_validation :downcase_email
+
   validates :name,
     presence: true,
     length: { maximum: 30 }
@@ -29,8 +31,6 @@ class User < ApplicationRecord
     length: { minimum: 8 }
 
   validate :admin_change_validation, if: -> { will_save_change_to_admin? && !self.admin? }
-
-  before_save :downcase_email
 
   before_destroy :admin_destory_validation, if: -> { self.admin? }
 
