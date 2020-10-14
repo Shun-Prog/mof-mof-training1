@@ -35,7 +35,7 @@
             <%= form.datetime_field :expired_at, class: "form-control" %>
         </div>
 
-        <div class="field">
+        <div>
             <%= form.collection_check_boxes(:label_ids, Label.all, :id, :name) %>
         </div>
 
