@@ -1,5 +1,13 @@
 if Rails.env.development?
 
+  # ラベルマスタ作成
+  labels = %w(仕事 趣味 家)
+  labels.each do |label| 
+    Label.create!(
+      name: label
+    )
+  end
+
   # 一般ユーザー作成
   user = User.create!(
     name: "ダミーユーザー",
@@ -21,7 +29,7 @@ if Rails.env.development?
   User.create!(
     name: "管理者",
     email: "admin@example.com",
-    password: "12345678"
+    password: "12345678", 
     admin: true
   )
 
