@@ -3,7 +3,7 @@ class TasksController < ApplicationController
   before_action :auth_session
 
   def index
-    @search = current_user.tasks.eager_load(:labels).ransack(params[:q])
+    @search = current_user.tasks.preload(:labels).ransack(params[:q])
     @tasks = @search.result(distinct: true).recent.page(params[:page])
   end
   
