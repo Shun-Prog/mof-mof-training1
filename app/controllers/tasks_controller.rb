@@ -3,8 +3,8 @@ class TasksController < ApplicationController
   before_action :auth_session
 
   def index
-    @search = current_user.tasks.ransack(params[:q])
-    @tasks = @search.result.recent.page(params[:page])
+    @search = current_user.tasks.eager_load(:labels).ransack(params[:q])
+    @tasks = @search.result(distinct: true).recent.page(params[:page])
   end
   
   def show
@@ -54,7 +54,7 @@ class TasksController < ApplicationController
     end
 
     def task_params
-      params.require(:task).permit(:name, :description, :status, :priority, :expired_at, :status_eq)
+      params.require(:task).permit(:name, :description, :status, :priority, :expired_at, { label_ids: [] })
     end
 
 end

@@ -2,9 +2,21 @@
     <div class="tasks_top_boxies">
         <div class="task_search_box form-inline">
             <%= search_form_for @search do |form| %>
-            <%= form.search_field :name_cont, class: "form-control", placeholder: "タスク名" %>
-            <%= form.select :status_eq, Task.statuses.map {|k, v| [I18n.t("enums.task.status.#{k}"), v] }, {include_blank: true}, class: "form-control mr-sm-2" %>
-            <%= form.submit "検索", class: "btn btn-primary" %>
+                <%= form.search_field :name_cont, class: "form-control", placeholder: "タスク名" %>
+                <%= form.select :status_eq, Task.statuses.map {|k, v| [I18n.t("enums.task.status.#{k}"), v] }, {include_blank: true}, class: "form-control mr-sm-2" %>
+                <% Label.all.each do |label| %>
+                    <%= label.name %>
+                    <%= form.check_box :labels_id_eq_any, 
+                        { 
+                            multiple: true, 
+                            checked: label[:checked], 
+                            disabled: label[:disabled], 
+                            include_hidden: false 
+                        }, 
+                        label[:id] 
+                    %>
+                <% end %>
+                <%= form.submit "検索", class: "btn btn-primary" %>
             <% end %>
         </div>
         <div class="tasks_pagenation">
@@ -28,6 +40,9 @@
             <th>
                 <%=Task.human_attribute_name("created_at")%>
             </th>
+            <th>
+                <%=Label.human_attribute_name("name")%>
+            </th>
         </tr>
         <% @tasks.each do |task| %>
         <tr class="task_row">
@@ -36,8 +51,13 @@
             <td class="task_priority"><%= task.priority_i18n %></td>
             <td class="task_expired_at"><%= l task.expired_at %></td>
             <td class="task_created_at"><%= l task.created_at %></td>
+            <td class="task_labels">
+            <% task.labels.each do |label| %>
+                <span class="task_label"><%= label.name %></span>
+            <% end %>
+            </td>
             <% if current_user_task?(task) %>
-            <td><%= link_to "詳細", task_path(task) %></td>
+                <td><%= link_to "詳細", task_path(task) %></td>
             <% end %>
         </tr>
         <% end %>

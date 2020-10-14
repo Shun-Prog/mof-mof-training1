@@ -39,6 +39,13 @@
                 </span>
             </p>
 
+            <p class="card-text mb-3">
+                <%=Label.human_attribute_name(:name)%> :
+                <% @task.labels.each do |label| %>
+                    <span class="task_label"><%= label.name %></span>
+                <% end %>
+            </p>
+
             <%= link_to '編集', edit_task_path(@task) %>
             <%= link_to "削除", @task, method: :delete, data: { confirm: "タスクを削除してもよろしいですか？" } %>
             <%= link_to '一覧に戻る', tasks_path %>
