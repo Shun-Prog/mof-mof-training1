@@ -32,8 +32,8 @@ RSpec.describe "Users", type: :system do
         visit admin_users_path
       end
 
-      it "ルートページが表示される" do
-        expect(page).to have_current_path root_path
+      it "500エラーページが表示される" do
+        expect(page).to have_content "500 Internal Server Error"
       end
 
     end
@@ -124,8 +124,8 @@ RSpec.describe "Users", type: :system do
         click_button "保存"
       end
 
-      it "ルートページが表示される" do
-        expect(page).to have_current_path root_path
+      it "500エラーページが表示される" do
+        expect(page).to have_content "500 Internal Server Error"
       end
 
     end
