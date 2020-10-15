@@ -1,0 +1,13 @@
+header
+  nav.navbar.fixed-top.navbar-dark.bg-primary
+    a.navbar-brand[href="/"]
+      | タスク管理
+    - if logged_in?
+      ul.nav
+        li.nav-item
+          = link_to "タスク作成", new_task_path, class: "nav-link text-white"
+        - if current_user.admin?
+          li.nav-item
+            = link_to "ユーザー管理", admin_users_path, class: "nav-link text-white"
+        li.nav-item
+          = link_to "ログアウト", logout_path, method: :delete, class: "nav-link text-white"

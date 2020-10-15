@@ -1,0 +1,19 @@
+.container-fluid
+  .card
+    .card-body
+      h4.card-title
+        span.user_name
+          = @user.name
+      p.card-text
+        =User.human_attribute_name("email")
+        |  : 
+        span.user_email
+          = @user.email
+      p.card-text
+        =User.human_attribute_name("admin")
+        |  : 
+        span.user_email
+          = @user.admin? ? '有り': '無し'
+      = link_to '編集', edit_admin_user_path(@user)
+      = link_to "削除", admin_user_path(@user), method: :delete, data: { confirm: "ユーザーを削除してもよろしいですか？" }
+      = link_to '一覧に戻る', admin_users_path
