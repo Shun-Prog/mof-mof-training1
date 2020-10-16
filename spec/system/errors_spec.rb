@@ -1,7 +1,7 @@
 require "rails_helper"
 
-shared_examples "500エラーページが表示される" do
-  it { expect(page).to have_content "500 Internal Server Error" }
+shared_examples "403エラーページが表示される" do
+  it { expect(page).to have_content "403 Forbidden" }
 end
 
 RSpec.describe "Errors", type: :system do
@@ -17,7 +17,7 @@ RSpec.describe "Errors", type: :system do
         visit admin_users_path
       end
   
-      it_behaves_like "500エラーページが表示される"
+      it_behaves_like "403エラーページが表示される"
 
     end
 
@@ -28,7 +28,7 @@ RSpec.describe "Errors", type: :system do
         visit admin_user_tasks_path(non_admin_user)
       end
   
-      it_behaves_like "500エラーページが表示される"
+      it_behaves_like "403エラーページが表示される"
 
     end
     
