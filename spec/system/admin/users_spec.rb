@@ -7,37 +7,17 @@ RSpec.describe "Users", type: :system do
 
   describe "一覧" do
 
-    context "管理者ユーザーの場合" do
-
-      before do
-        login(user)
-        visit admin_users_path
-      end
-
-      it "ユーザー一覧が表示される" do
-        expect(page).to have_content user.name
-        expect(page).to have_content user.email
-        expect(page).to have_content user.tasks.count
-        expect(page).to have_content user.admin? ? "有り" : "無し"
-      end
-
+    before do
+      login(user)
+      visit admin_users_path
     end
 
-    context "管理者権限の無いユーザーの場合" do
-
-      let(:non_admin_user) { create(:user, admin: false) }
-
-      before do
-        login(non_admin_user)
-        visit admin_users_path
-      end
-
-      it "ルートページが表示される" do
-        expect(page).to have_current_path root_path
-      end
-
+    it "ユーザー一覧が表示される" do
+      expect(page).to have_content user.name
+      expect(page).to have_content user.email
+      expect(page).to have_content user.tasks.count
+      expect(page).to have_content user.admin? ? "有り" : "無し"
     end
-    
 
   end
 
@@ -104,9 +84,7 @@ RSpec.describe "Users", type: :system do
 
       it "ユーザーを編集できる" do
         click_button "保存"
-        expect(page).to have_content name
-        expect(page).to have_content email
-        expect(page).to have_content "有り"
+        expect(page).to have_content "ユーザーを更新しました"
       end
 
     end
@@ -124,8 +102,8 @@ RSpec.describe "Users", type: :system do
         click_button "保存"
       end
 
-      it "ルートページが表示される" do
-        expect(page).to have_current_path root_path
+      it "ユーザーを編集できる" do
+        expect(page).to have_content "ユーザーを更新しました"
       end
 
     end

@@ -1,6 +1,5 @@
-class Admin::UsersController < ApplicationController
+class Admin::UsersController < Admin::AdminController
   before_action :auth_session
-  before_action :require_admin
   before_action :set_user, only: [:edit, :show, :update, :destroy]
   
   def index
@@ -16,8 +15,7 @@ class Admin::UsersController < ApplicationController
   def update
       if @user.update(user_params)
         flash[:success] = "ユーザーを更新しました"
-        redirect_to admin_user_url(@user)
-        
+        redirect_to root_path
       else
         flash.now[:danger] = "ユーザーを更新できませんでした"
         render 'edit'
@@ -43,7 +41,7 @@ class Admin::UsersController < ApplicationController
     if @user.destroy
       logout if current_user.id == @user.id
       flash[:success] = 'ユーザーを削除しました'
-      redirect_to admin_users_url
+      redirect_to root_path
     else
       flash.now[:danger] = 'ユーザーを削除できませんでした'
       render 'edit'
@@ -58,9 +56,5 @@ class Admin::UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation, :admin)
     end
-
-    def require_admin
-      redirect_to root_path unless current_user.admin?
-    end
-
+    
 end

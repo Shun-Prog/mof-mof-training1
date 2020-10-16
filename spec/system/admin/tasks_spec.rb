@@ -2,16 +2,15 @@ require "rails_helper"
 
 RSpec.describe "Tasks", type: :system do
 
-  let(:user) { create(:user) }
-  let!(:task) { create(:task, user: user) }
-
   describe "一覧" do
+
+    let(:user) { create(:user) }
+    let!(:task) { create(:task, user: user) }
 
     before do
       login(user)
       visit admin_user_tasks_path(user)
     end
-    
 
     it "タスク一覧が表示される" do
       expect(page).to have_content task.name
