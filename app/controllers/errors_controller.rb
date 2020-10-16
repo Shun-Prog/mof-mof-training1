@@ -1,8 +1,9 @@
 class ErrorsController < ActionController::Base
+  include CustomExceptions;
 
   rescue_from StandardError, with: :render_500
   rescue_from ActionController::RoutingError, with: :render_404
-  rescue_from ApplicationController::NotAuthorizedError, with: :render_403
+  rescue_from NotAuthorizedError, with: :render_403
 
   def render_403(exception = nil)
     if exception

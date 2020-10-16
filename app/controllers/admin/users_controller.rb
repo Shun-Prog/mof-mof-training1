@@ -1,6 +1,5 @@
-class Admin::UsersController < ApplicationController
+class Admin::UsersController < Admin::AdminController
   before_action :auth_session
-  before_action :require_admin
   before_action :set_user, only: [:edit, :show, :update, :destroy]
   
   def index
