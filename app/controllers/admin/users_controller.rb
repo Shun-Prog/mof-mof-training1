@@ -16,8 +16,7 @@ class Admin::UsersController < ApplicationController
   def update
       if @user.update(user_params)
         flash[:success] = "ユーザーを更新しました"
-        redirect_to admin_user_url(@user)
-        
+        redirect_to root_path
       else
         flash.now[:danger] = "ユーザーを更新できませんでした"
         render 'edit'
@@ -43,7 +42,7 @@ class Admin::UsersController < ApplicationController
     if @user.destroy
       logout if current_user.id == @user.id
       flash[:success] = 'ユーザーを削除しました'
-      redirect_to admin_users_url
+      redirect_to root_path
     else
       flash.now[:danger] = 'ユーザーを削除できませんでした'
       render 'edit'
