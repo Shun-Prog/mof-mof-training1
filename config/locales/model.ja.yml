@@ -13,6 +13,8 @@ ja:
     models:
       task: タスク
       user: ユーザー
+      label: ラベル
+      task_label: タスクラベル
     attributes:
         task:
           id: ID
@@ -21,6 +23,7 @@ ja:
           status: ステータス
           priority: 優先順位
           expired_at: 終了期限
+          user_id: 作成者
         user:
           id: ID
           name: ユーザー名
@@ -28,6 +31,8 @@ ja:
           password: パスワード
           password_confirmation: パスワード(確認用)
           admin: 管理者権限
+        label:
+          name: ラベル
   attributes:
     created_at: 作成日
     updated_at: 更新日

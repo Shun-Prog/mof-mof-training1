@@ -13,6 +13,7 @@ RSpec.describe "Tasks", type: :system do
 
       let!(:task){ create(:task, user: user) }
       let!(:task_add_1day){ create(:task, created_at: Time.current + 1.days, user: user) }
+      let!(:task_labels){ create_pair(:task_label, task: task) }
 
       before do
         login(user)
@@ -24,6 +25,9 @@ RSpec.describe "Tasks", type: :system do
         expect(page).to have_content task.priority_i18n
         expect(page).to have_content I18n.l(task.created_at)
         expect(page).to have_content I18n.l(task.expired_at)
+        task_labels.each do |task_label|
+          expect(page).to have_content task_label.label.name
+        end
       end
 
       it "作成日の降順で並ぶ" do
@@ -154,11 +158,28 @@ RSpec.describe "Tasks", type: :system do
       end
     end
 
+    context "ラベルで検索した時" do
+
+      let!(:task){ create(:task, user: user) }
+      let!(:task_labels){ create_pair(:task_label, task: task) }
+
+      before do
+        login(user)
+      end
+
+      it "検索した値で表示される" do
+        check "q_labels_id_eq_any_#{task_labels[0].label.id}"
+        click_button "検索"
+        expect(rows[0].find(".task_labels").text).to have_content task_labels[0].label.name
+      end
+    end
+
   end
 
   describe "詳細" do
 
     let!(:task){ create(:task, user: user) }
+    let!(:task_labels){ create_pair(:task_label, task: task) }
 
     before do
       login(user)
@@ -172,11 +193,17 @@ RSpec.describe "Tasks", type: :system do
       expect(page).to have_content task.priority_i18n
       expect(page).to have_content I18n.l(task.expired_at)
       expect(page).to have_content I18n.l(task.created_at)
+      task_labels.each do |task_label|
+        expect(page).to have_content task_label.label.name
+      end
+
     end
 
   end
 
   describe "作成" do
+
+    let!(:labels){ create_pair(:label) }
 
     before do
       login(user)
@@ -184,6 +211,7 @@ RSpec.describe "Tasks", type: :system do
       fill_in "タスク名",	with: name
       fill_in "タスク詳細",	with: description
       fill_in "終了期限",	with: expired_at
+      check "task_label_ids_#{labels[0].id}"
       click_button "保存"
     end
 
@@ -200,6 +228,8 @@ RSpec.describe "Tasks", type: :system do
         expect(page).to have_content I18n.t(:low, scope: [:enums, :task, :priority])
         expect(page).to have_selector ".task_expired_at", text: I18n.l(expired_at).to_s
         expect(page).to have_selector ".task_created_at", text: /^\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}/
+        expect(page).to have_content labels[0].name
+        expect(page).to have_no_content labels[1].name
       end
     end
 
@@ -218,6 +248,7 @@ RSpec.describe "Tasks", type: :system do
 
   describe "編集" do
 
+    let!(:labels){ create_pair(:label) }
     let!(:task){ create(:task, user: user) }
 
     before do
@@ -226,6 +257,7 @@ RSpec.describe "Tasks", type: :system do
       fill_in "タスク名",	with: name
       fill_in "タスク詳細",	with: description
       fill_in "終了期限",	with: expired_at
+      check "task_label_ids_#{labels[0].id}"
       click_button "保存"
     end
 
@@ -242,6 +274,8 @@ RSpec.describe "Tasks", type: :system do
         expect(page).to have_content I18n.t(:low, scope: [:enums, :task, :priority])
         expect(page).to have_selector ".task_expired_at", text: I18n.l(expired_at).to_s
         expect(page).to have_selector ".task_created_at", text: /^\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}/
+        expect(page).to have_content labels[0].name
+        expect(page).to have_no_content labels[1].name
       end
     end
   end

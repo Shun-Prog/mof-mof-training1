@@ -27,15 +27,34 @@ RSpec.describe Task, type: :model do
 
   describe "アソシエーション" do
 
-    describe "belongs_to" do
+    describe "belongs_to user" do
       let!(:user) { create(:user) }
       let!(:task) { create(:task, user: user) }
 
-      it "TaskとUserは1対多の関係になる" do
+      it "UserとTaskは1対多の関係になる" do
         expect(task.user).to eq user
+      end
+    end
+
+    describe "has_many task_label " do
+
+      let!(:task) { create(:task) }
+      let!(:task_labels) { create_pair(:task_label, task: task) }
+
+      it "TaskとTaskLabelは1対多の関係になる" do
+        expect(task.task_labels).to match_array task_labels
+      end
+
+      context "タスクを削除した時" do
+        
+        it "関連するタスクラベルが削除される" do
+          expect{ task.destroy }.to change{ TaskLabel.count }.by(-2)
+        end
+  
       end
 
     end
+
   end
 
   describe "タスク名のバリデーション" do

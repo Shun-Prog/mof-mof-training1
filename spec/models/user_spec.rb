@@ -16,7 +16,7 @@ RSpec.describe User, type: :model do
 
   describe "アソシエーション" do
 
-    describe "has_many" do
+    describe "has_many tasks" do
 
       let!(:user) { create(:user) }
       let!(:tasks) { create_pair(:task, user: user) }
@@ -25,15 +25,20 @@ RSpec.describe User, type: :model do
         expect(user.tasks).to match_array tasks
       end
 
-    end
+      context "ユーザーを削除した時" do
 
-    context "ユーザーを削除した時" do
-
-      let!(:non_admin_user) { create(:user, admin: false) }
-      let!(:tasks) { create(:task, user: non_admin_user) }
-
-      it "関連するタスクが削除される" do
-        expect{ non_admin_user.destroy }.to change{ Task.count }.by(-1)
+        let!(:non_admin_user) { create(:user, admin: false) }
+        let!(:task) { create(:task, user: non_admin_user) }
+        let!(:task_label) { create(:task_label, task: task) }
+  
+        it "関連するタスクが削除される" do
+          expect{ non_admin_user.destroy }.to change{ Task.count }.by(-1)
+        end
+        
+        it "関連するタスクラベルが削除される" do
+          expect{ non_admin_user.destroy }.to change{ TaskLabel.count }.by(-1)
+        end
+  
       end
 
     end
