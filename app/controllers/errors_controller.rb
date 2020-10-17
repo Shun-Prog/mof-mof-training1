@@ -1,5 +1,5 @@
 class ErrorsController < ActionController::Base
-  include CustomExceptions;
+  include CustomExceptions
 
   rescue_from StandardError, with: :render_500
   rescue_from ActionController::RoutingError, with: :render_404
@@ -27,11 +27,12 @@ class ErrorsController < ActionController::Base
   end
 
   def renderer(status)
-    render template: "errors/error_#{status}", status: status, layout: 'application'
+    render template: "errors/error_#{status}",
+           status: status,
+           layout: 'application'
   end
 
   def show
-    raise request.env["action_dispatch.exception"]
+    raise request.env['action_dispatch.exception']
   end
-
 end

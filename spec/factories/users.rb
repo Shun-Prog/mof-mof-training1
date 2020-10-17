@@ -12,10 +12,10 @@
 #
 FactoryBot.define do
   factory :user do
-    sequence(:name) { |n| "dummy_name#{n}"}
-    sequence(:email) { |n| "dummy#{n}@example.com"}
-    password { "12345678" }
-    password_confirmation { "12345678" }
+    sequence(:name) { |n| "dummy_name#{n}" }
+    sequence(:email) { |n| "dummy#{n}@example.com" }
+    password { '12345678' }
+    password_confirmation { '12345678' }
     admin { true }
   end
 end

@@ -10,244 +10,208 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe User, type: :model do
-
-  describe "アソシエーション" do
-
-    describe "has_many tasks" do
-
+  describe 'アソシエーション' do
+    describe 'has_many tasks' do
       let!(:user) { create(:user) }
       let!(:tasks) { create_pair(:task, user: user) }
 
-      it "UserとTaskは1対多の関係になる" do
+      it 'UserとTaskは1対多の関係になる' do
         expect(user.tasks).to match_array tasks
       end
 
-      context "ユーザーを削除した時" do
-
+      context 'ユーザーを削除した時' do
         let!(:non_admin_user) { create(:user, admin: false) }
         let!(:task) { create(:task, user: non_admin_user) }
         let!(:task_label) { create(:task_label, task: task) }
-  
-        it "関連するタスクが削除される" do
-          expect{ non_admin_user.destroy }.to change{ Task.count }.by(-1)
+
+        it '関連するタスクが削除される' do
+          expect { non_admin_user.destroy }.to change { Task.count }.by(-1)
         end
-        
-        it "関連するタスクラベルが削除される" do
-          expect{ non_admin_user.destroy }.to change{ TaskLabel.count }.by(-1)
+
+        it '関連するタスクラベルが削除される' do
+          expect { non_admin_user.destroy }.to change { TaskLabel.count }.by(-1)
         end
-  
       end
-
     end
-
   end
 
-  describe "ユーザー名" do
+  describe 'ユーザー名' do
+    context 'ユーザー名が有る場合' do
+      let!(:user) { build(:user) }
 
-    context "ユーザー名が有る場合" do
-      
-      let!(:user){ build(:user) }
-
-      it "有効である" do
+      it '有効である' do
         expect(user).to be_valid
       end
-
     end
 
-    context "ユーザー名が無い場合" do
-      
-      let!(:user){ build(:user, name: "") }
+    context 'ユーザー名が無い場合' do
+      let!(:user) { build(:user, name: '') }
 
-      it "無効である" do
+      it '無効である' do
         expect(user).to be_invalid
       end
 
-      it "入力不足のエラーメッセージが出る" do
+      it '入力不足のエラーメッセージが出る' do
         user.valid?
-        expect(user.errors[:name]).to include("を入力してください")
+        expect(user.errors[:name]).to include('を入力してください')
       end
-
     end
 
-    context "30文字超過の時" do
+    context '30文字超過の時' do
+      let!(:user) { build(:user, name: 'a' * 31) }
 
-      let!(:user){ build(:user, name: "a" * 31) }
-
-      it "無効である" do
+      it '無効である' do
         expect(user).to be_invalid
       end
 
-      it "文字数超過のエラーメッセージが出る" do
+      it '文字数超過のエラーメッセージが出る' do
         user.valid?
-        expect(user.errors[:name]).to include("は30文字以内で入力してください")
+        expect(user.errors[:name]).to include('は30文字以内で入力してください')
       end
-
     end
-
   end
 
-  describe "メールアドレス" do
+  describe 'メールアドレス' do
+    context 'メールアドレスが有る場合' do
+      let!(:user) { build(:user) }
 
-    context "メールアドレスが有る場合" do
-
-      let!(:user){ build(:user) }
-
-      it "有効である" do
+      it '有効である' do
         expect(user).to be_valid
       end
-
     end
 
-    context "メールアドレスが無い場合" do
+    context 'メールアドレスが無い場合' do
+      let!(:user) { build(:user, email: '') }
 
-      let!(:user){ build(:user, email: "") }
-
-      it "無効である" do
+      it '無効である' do
         expect(user).to be_invalid
       end
 
-      it "入力不足のエラーメッセージが出る" do
+      it '入力不足のエラーメッセージが出る' do
         user.valid?
-        expect(user.errors[:email]).to include("を入力してください")
+        expect(user.errors[:email]).to include('を入力してください')
       end
-
     end
 
-    context "メールアドレスが大文字の場合" do
+    context 'メールアドレスが大文字の場合' do
+      let!(:user) { create(:user, email: email) }
+      let!(:email) { 'TEST@EXAMPLE.COM' }
 
-      let!(:user){ create(:user, email: email) }
-      let!(:email){ "TEST@EXAMPLE.COM" }
-
-      it "小文字で保存される" do
+      it '小文字で保存される' do
         expect(user.email).to eq email.downcase
       end
-
     end
 
-    context "メールアドレスの形式が不正な場合" do
+    context 'メールアドレスの形式が不正な場合' do
+      let!(:user) { build(:user, email: '1234atexample.com') }
 
-      let!(:user){ build(:user, email: "1234atexample.com") }
-
-      it "無効である" do
+      it '無効である' do
         expect(user).to be_invalid
       end
 
-      it "入力不足のエラーメッセージが出る" do
+      it '入力不足のエラーメッセージが出る' do
         user.valid?
-        expect(user.errors[:email]).to include("は不正な値です")
+        expect(user.errors[:email]).to include('は不正な値です')
       end
-
     end
 
-    context "既存データと重複する場合" do
+    context '既存データと重複する場合' do
+      let!(:user) { create(:user, email: 'duplicate@example.com') }
+      let!(:duplicate_user) { build(:user, email: 'duplicate@example.com') }
 
-      let!(:user){ create(:user, email: "duplicate@example.com") }
-      let!(:duplicate_user){ build(:user, email: "duplicate@example.com") }
-
-      it "無効である" do
+      it '無効である' do
         expect(duplicate_user).to be_invalid
       end
 
-      it "重複のエラーメッセージが出る" do
+      it '重複のエラーメッセージが出る' do
         duplicate_user.valid?
-        expect(duplicate_user.errors[:email]).to include("はすでに存在します")
+        expect(duplicate_user.errors[:email]).to include('はすでに存在します')
       end
-
     end
-
   end
 
-  describe "パスワード" do
+  describe 'パスワード' do
+    context 'パスワードが有る場合' do
+      let!(:user) { build(:user) }
 
-    context "パスワードが有る場合" do
-
-      let!(:user){ build(:user) }
-
-      it "有効である" do
+      it '有効である' do
         expect(user).to be_valid
       end
-
     end
 
-    context "パスワードが無い場合" do
+    context 'パスワードが無い場合' do
+      let!(:user) { build(:user, password: '') }
 
-      let!(:user){ build(:user, password: "") }
-
-      it "無効である" do
+      it '無効である' do
         expect(user).to be_invalid
       end
 
-      it "入力不足のエラーメッセージが出る" do
+      it '入力不足のエラーメッセージが出る' do
         user.valid?
-        expect(user.errors[:password]).to include("を入力してください")
+        expect(user.errors[:password]).to include('を入力してください')
       end
-
     end
 
-    context "7文字以下の時" do
+    context '7文字以下の時' do
+      let!(:user) { build(:user, password: 'a' * 7) }
 
-      let!(:user){ build(:user, password: "a" * 7) }
-
-      it "無効である" do
+      it '無効である' do
         expect(user).to be_invalid
       end
 
-      it "文字数不足のエラーメッセージが出る" do
+      it '文字数不足のエラーメッセージが出る' do
         user.valid?
-        expect(user.errors[:password]).to include("は8文字以上で入力してください")
+        expect(user.errors[:password]).to include(
+          'は8文字以上で入力してください'
+        )
       end
-
     end
 
-    context "確認用パスワードと一致しない時" do
+    context '確認用パスワードと一致しない時' do
+      let!(:user) do
+        build(:user, password: 'a' * 8, password_confirmation: 'b' * 8)
+      end
 
-      let!(:user){ build(:user, password: "a" * 8, password_confirmation: "b" * 8) }
-      
-      it "無効である" do
+      it '無効である' do
         expect(user).to be_invalid
       end
 
-      it "不一致のエラーメッセージが出る" do
+      it '不一致のエラーメッセージが出る' do
         user.valid?
-        expect(user.errors[:password_confirmation]).to include("とパスワードの入力が一致しません")
+        expect(user.errors[:password_confirmation]).to include(
+          'とパスワードの入力が一致しません'
+        )
       end
-
     end
-
   end
 
-  describe "管理者権限" do
+  describe '管理者権限' do
+    let!(:user) { create(:user) }
 
-    let!(:user){ create(:user) }
-
-    context "管理者が1ユーザーの状態管理者権限を無しにする時" do
-
+    context '管理者が1ユーザーの状態管理者権限を無しにする時' do
       before do
         user.admin = false
         user.valid?
       end
-      
-      it "無効である" do
-        expect(user.errors[:admin]).to include("は最低1ユーザー保持する必要があります")
+
+      it '無効である' do
+        expect(user.errors[:admin]).to include(
+          'は最低1ユーザー保持する必要があります'
+        )
       end
-      
     end
 
-    context "管理者が1ユーザーの状態で削除する時" do
+    context '管理者が1ユーザーの状態で削除する時' do
+      before { user.destroy }
 
-      before do
-        user.destroy
+      it '無効である' do
+        expect(user.errors[:admin]).to include(
+          'は最低1ユーザー保持する必要があります'
+        )
       end
-
-      it "無効である" do
-        expect(user.errors[:admin]).to include("は最低1ユーザー保持する必要があります")
-      end
-
     end
-
   end
-
 end

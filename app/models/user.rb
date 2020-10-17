@@ -16,47 +16,43 @@ class User < ApplicationRecord
 
   before_validation :downcase_email
 
-  validates :name,
-    presence: true,
-    length: { maximum: 30 }
-  
+  validates :name, presence: true, length: { maximum: 30 }
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email,
-    presence: true,
-    format: VALID_EMAIL_REGEX,
-    uniqueness: { case_sensitive: false }
+            presence: true,
+            format: VALID_EMAIL_REGEX,
+            uniqueness: { case_sensitive: false }
 
-  validates :password,
-    presence: true,
-    length: { minimum: 8 }
+  validates :password, presence: true, length: { minimum: 8 }
 
-  validate :admin_change_validation, if: -> { will_save_change_to_admin? && !self.admin? }
+  validate :admin_change_validation,
+           if: -> { will_save_change_to_admin? && !self.admin? }
 
   before_destroy :admin_destory_validation, if: -> { self.admin? }
 
   private
 
-    def admin_change_validation
-        set_admin_error_message if last_one_admin?
-    end
+  def admin_change_validation
+    set_admin_error_message if last_one_admin?
+  end
 
-    def admin_destory_validation
-      if last_one_admin?
-        set_admin_error_message 
-        throw(:abort)
-      end
+  def admin_destory_validation
+    if last_one_admin?
+      set_admin_error_message
+      throw(:abort)
     end
+  end
 
-    def last_one_admin?
-      User.where(admin: true).count == 1
-    end
+  def last_one_admin?
+    User.where(admin: true).count == 1
+  end
 
-    def set_admin_error_message
-      errors.add(:admin, 'は最低1ユーザー保持する必要があります')
-    end
+  def set_admin_error_message
+    errors.add(:admin, 'は最低1ユーザー保持する必要があります')
+  end
 
-    def downcase_email
-      self.email.downcase! 
-    end
-
+  def downcase_email
+    self.email.downcase!
+  end
 end
