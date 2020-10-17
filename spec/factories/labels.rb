@@ -9,6 +9,6 @@
 #
 FactoryBot.define do
   factory :label do
-    sequence(:name) { |n| "dummy_label#{n}"}
+    sequence(:name) { |n| "dummy_label#{n}" }
   end
 end

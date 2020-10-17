@@ -1,27 +1,25 @@
 class Admin::UsersController < Admin::AdminController
   before_action :auth_session
-  before_action :set_user, only: [:edit, :show, :update, :destroy]
-  
+  before_action :set_user, only: %i[edit show update destroy]
+
   def index
     @users = User.all
   end
-  
-  def show
-  end
 
-  def edit
-  end
+  def show; end
+
+  def edit; end
 
   def update
-      if @user.update(user_params)
-        flash[:success] = "ユーザーを更新しました"
-        redirect_to root_path
-      else
-        flash.now[:danger] = "ユーザーを更新できませんでした"
-        render 'edit'
-      end
+    if @user.update(user_params)
+      flash[:success] = 'ユーザーを更新しました'
+      redirect_to root_path
+    else
+      flash.now[:danger] = 'ユーザーを更新できませんでした'
+      render 'edit'
+    end
   end
-  
+
   def new
     @user = User.new
   end
@@ -29,10 +27,10 @@ class Admin::UsersController < Admin::AdminController
   def create
     @user = User.new(user_params)
     if @user.save
-      flash[:success] = "ユーザーを作成しました"
+      flash[:success] = 'ユーザーを作成しました'
       redirect_to admin_user_url(@user)
     else
-      flash.now[:danger] = "ユーザーを作成できませんでした"
+      flash.now[:danger] = 'ユーザーを作成できませんでした'
       render 'new'
     end
   end
@@ -47,14 +45,20 @@ class Admin::UsersController < Admin::AdminController
       render 'edit'
     end
   end
-  
-  private
-    def set_user
-      @user = User.find(params[:id])
-    end
 
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :admin)
-    end
-    
+  private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def user_params
+    params.require(:user).permit(
+      :name,
+      :email,
+      :password,
+      :password_confirmation,
+      :admin
+    )
+  end
 end

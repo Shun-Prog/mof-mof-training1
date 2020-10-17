@@ -22,21 +22,21 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Task < ApplicationRecord
-    belongs_to :user
-    has_many :task_labels, dependent: :destroy
-    has_many :labels, through: :task_labels
-    
-    validates :name, presence: true, length: { maximum: 30 }
-    validates :description, presence: true, length: { maximum: 1000 }
-    validate :expired_at_valid?
+  belongs_to :user
+  has_many :task_labels, dependent: :destroy
+  has_many :labels, through: :task_labels
+  validates :name, presence: true, length: { maximum: 30 }
+  validates :description, presence: true, length: { maximum: 1000 }
+  validate :expired_at_valid?
 
-    enum status: { 'ready': 0, 'started': 1, 'done': 2 }
-    enum priority: { 'low': 0, 'medium': 1, 'high': 2 }
+  enum status: { 'ready': 0, 'started': 1, 'done': 2 }
+  enum priority: { 'low': 0, 'medium': 1, 'high': 2 }
 
-    def expired_at_valid?        
-        errors.add(:expired_at, 'は現在日以降の日付を入力してください') if expired_at.nil? || Date.parse(expired_at.to_s) < Date.today
+  def expired_at_valid?
+    if expired_at.nil? || Date.parse(expired_at.to_s) < Date.today
+      errors.add(:expired_at, 'は現在日以降の日付を入力してください')
     end
+  end
 
-    scope :recent, -> { order(created_at: :desc) }
-    
+  scope :recent, -> { order(created_at: :desc) }
 end

@@ -1,54 +1,54 @@
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">
-                <span class="task_name">
-                    <%= @task.name %>
-                </span>
-            </h4>
-            <p class="card-text">
-                <span class="task_description">
-                    <%= @task.description %>
-                </span>
-            </p>
-            <p class="card-text mb-3">
-                <%=Task.human_attribute_name(:status)%> :
-                <span class="task_status">
-                    <%= @task.status_i18n %>
-                </span>
-            </p>
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">
+        <span class="task_name">
+          <%= @task.name %>
+        </span>
+      </h4>
+      <p class="card-text">
+        <span class="task_description">
+          <%= @task.description %>
+        </span>
+      </p>
+      <p class="card-text mb-3">
+        <%=Task.human_attribute_name(:status)%> :
+        <span class="task_status">
+          <%= @task.status_i18n %>
+        </span>
+      </p>
 
-            <p class="card-text mb-3">
-                <%=Task.human_attribute_name(:priority)%> :
-                <span class="task_priority">
-                    <%= @task.priority_i18n %>
-                </span>
-            </p>
+      <p class="card-text mb-3">
+        <%=Task.human_attribute_name(:priority)%> :
+        <span class="task_priority">
+          <%= @task.priority_i18n %>
+        </span>
+      </p>
 
-            <p class="card-text mb-3">
-                <%=Task.human_attribute_name(:expired_at)%> :
-                <span class="task_expired_at">
-                    <%= l @task.expired_at %>
-                </span>
-            </p>
+      <p class="card-text mb-3">
+        <%=Task.human_attribute_name(:expired_at)%> :
+        <span class="task_expired_at">
+          <%= l @task.expired_at %>
+        </span>
+      </p>
 
-            <p class="card-text mb-3">
-                <%=Task.human_attribute_name(:created_at)%> :
-                <span class="task_created_at">
-                    <%= l @task.created_at %>
-                </span>
-            </p>
+      <p class="card-text mb-3">
+        <%=Task.human_attribute_name(:created_at)%> :
+        <span class="task_created_at">
+          <%= l @task.created_at %>
+        </span>
+      </p>
 
-            <p class="card-text mb-3">
-                <%=Label.human_attribute_name(:name)%> :
-                <% @task.labels.each do |label| %>
-                    <span class="task_label"><%= label.name %></span>
-                <% end %>
-            </p>
+      <p class="card-text mb-3">
+        <%=Label.human_attribute_name(:name)%> :
+        <% @task.labels.each do |label| %>
+        <span class="task_label"><%= label.name %></span>
+        <% end %>
+      </p>
 
-            <%= link_to '編集', edit_task_path(@task) %>
-            <%= link_to "削除", @task, method: :delete, data: { confirm: "タスクを削除してもよろしいですか？" } %>
-            <%= link_to '一覧に戻る', tasks_path %>
-        </div>
+      <%= link_to '編集', edit_task_path(@task) %>
+      <%= link_to "削除", @task, method: :delete, data: { confirm: "タスクを削除してもよろしいですか？" } %>
+      <%= link_to '一覧に戻る', tasks_path %>
     </div>
+  </div>
 </div>
