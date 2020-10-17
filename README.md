@@ -1,5 +1,7 @@
 # README
 
+![demo](https://raw.github.com/wiki/Shun-Prog/mof-mof-training1/images/2020-10-17.gif)
+
 ## training(前半)
 
 ### 万葉さんの研修カリキュラムを利用
