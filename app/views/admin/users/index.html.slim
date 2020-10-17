@@ -1,0 +1,27 @@
+.container-fluid
+  div
+    = link_to "ユーザー作成", new_admin_user_path, class: "btn btn-success create_user_btn"
+  table.table.table-bordered
+    tr
+      th
+        =User.human_attribute_name("name")
+      th
+        =User.human_attribute_name("email")
+      th
+        |  タスク数 
+      th
+        =User.human_attribute_name("admin")
+      th
+
+    - @users.each do |user|
+      tr.task_row
+        td.user_name
+          = user.name
+        td.user_email
+          = user.email
+        td
+          = link_to user.tasks.count, admin_user_tasks_path(user)
+        td.user_admin
+          = user.admin? ? '有り': '無し'
+        td
+          = link_to "詳細", admin_user_path(user)

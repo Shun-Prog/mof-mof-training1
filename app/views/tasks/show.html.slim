@@ -1,0 +1,39 @@
+.container-fluid
+  .card
+    .card-body
+      h4.card-title
+        span.task_name
+          = @task.name
+      p.card-text
+        span.task_description
+          = @task.description
+      p.card-text.mb-3
+        =Task.human_attribute_name(:status)
+        |  : 
+        span.task_status
+          = @task.status_i18n
+      p.card-text.mb-3
+        =Task.human_attribute_name(:priority)
+        |  : 
+        span.task_priority
+          = @task.priority_i18n
+      p.card-text.mb-3
+        =Task.human_attribute_name(:expired_at)
+        |  : 
+        span.task_expired_at
+          = l @task.expired_at
+      p.card-text.mb-3
+        =Task.human_attribute_name(:created_at)
+        |  : 
+        span.task_created_at
+          = l @task.created_at
+      p.card-text.mb-3
+        =Label.human_attribute_name(:name)
+        |  : 
+        - @task.labels.each do |label|
+          span.task_label
+            = label.name
+            |  
+      = link_to '編集', edit_task_path(@task)
+      = link_to "削除", @task, method: :delete, data: { confirm: "タスクを削除してもよろしいですか？" }
+      = link_to '一覧に戻る', tasks_path

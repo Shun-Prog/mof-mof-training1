@@ -1,0 +1,6 @@
+h1
+  | ログイン
+= form_with scope: :session, url: login_path, local: true  do |form|
+  = form.email_field :email, placeholder: :email
+  = form.password_field :password, placeholder: :password
+  = form.submit "ログイン"

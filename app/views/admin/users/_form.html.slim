@@ -1,0 +1,21 @@
+.container-fluid
+  - if user.errors.any?
+    div
+      ul
+        - user.errors.full_messages.each do |msg|
+          li.text-danger
+            = msg
+  .form-group.row
+    = form_with  model: [:admin, @user], local: true do |form|
+      .field
+        = form.text_field :name, class: "form-control", placeholder: User.human_attribute_name("name")
+      .field
+        = form.email_field :email, class: "form-control", placeholder: User.human_attribute_name("email")
+      .field
+        = form.password_field :password, class: "form-control", placeholder: User.human_attribute_name("password")
+      .field
+        = form.password_field :password_confirmation, class: "form-control", placeholder: User.human_attribute_name("password_confirmation")
+      .field
+        = form.label :admin
+        = form.check_box :admin, class: "form-check-label"
+      = form.submit "保存", class: "btn btn-success create_user_btn"
